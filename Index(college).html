@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Student Utility Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+
+    <div class="max-w-4xl mx-auto my-10 p-6 bg-white rounded-2xl shadow-xl border border-slate-100">
+        <h1 class="text-3xl font-extrabold text-center text-indigo-600 mb-2">Student Utility Hub 🎓</h1>
+        <p class="text-center text-slate-500 mb-8 text-sm">വിദ്യാർത്ഥികൾക്ക് ആവശ്യമായ എല്ലാ അത്യാവശ്യ ടൂളുകളും ഒരൊറ്റ കുടക്കീഴിൽ</p>
+
+        <div class="flex flex-wrap gap-2 justify-center bg-slate-100 p-2 rounded-xl mb-8">
+            <button class="tab-btn px-4 py-2 rounded-lg font-bold text-sm bg-indigo-600 text-white transition" onclick="switchTab('docs', this)">📄 Doc & PDF Maker</button>
+            <button class="tab-btn px-4 py-2 rounded-lg font-bold text-sm text-slate-600 hover:bg-slate-200 transition" onclick="switchTab('image-tool', this)">🖼️ Photo Converter & Compressor</button>
+            <button class="tab-btn px-4 py-2 rounded-lg font-bold text-sm text-slate-600 hover:bg-slate-200 transition" onclick="switchTab('academic', this)">📊 CGPA & Case Converter</button>
+        </div>
+
+        <div id="docs" class="tab-content block space-y-6">
+            <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+                <h3 class="text-lg font-bold text-indigo-900 mb-2">Word / PDF Creator & Word Counter</h3>
+                <textarea id="docContent" oninput="countText()" class="w-full h-48 p-4 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="നിങ്ങളുടെ അസൈൻമെന്റ് കണ്ടെന്റ് ഇവിടെ ടൈപ്പ് ചെയ്യുക അല്ലെങ്കിൽ പേസ്റ്റ് ചെയ്യുക..."></textarea>
+                
+                <div class="flex justify-between text-xs text-slate-500 font-semibold mt-2 px-1">
+                    <span id="wordCount">വാക്കുകൾ: 0</span>
+                    <span id="charCount">അക്ഷരങ്ങൾ: 0</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <button onclick="downloadWord()" class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-bold shadow transition cursor-pointer">Download MS Word (.doc)</button>
+                    <button onclick="downloadPDF()" class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg font-bold shadow transition cursor-pointer">Download PDF (.pdf)</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="image-tool" class="tab-content hidden space-y-6">
+            <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
+                <h3 class="text-lg font-bold text-emerald-900 mb-2">Photo Resizer, Compressor & Format Converter (JPG/PNG)</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">ഫോട്ടോ തിരഞ്ഞെടുക്കുക:</label>
+                        <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">മാറ്റേണ്ട ഫോർമാറ്റ്:</label>
+                            <select id="imageFormat" class="w-full p-2 border border-slate-200 rounded-md bg-white">
+                                <option value="image/jpeg">JPG / JPEG</option>
+                                <option value="image/png">PNG</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">ക്വാളിറ്റി (Compress - സൈസ് കുറയ്ക്കാൻ):</label>
+                            <select id="imageQuality" class="w-full p-2 border border-slate-200 rounded-md bg-white">
+                                <option value="0.9">High Quality (കുറഞ്ഞ കംപ്രഷൻ)</option>
+                                <option value="0.6" selected>Medium Quality (നല്ല രീതിയിൽ സൈസ് കുറയും)</option>
+                                <option value="0.3">Low Quality (കൂടുതൽ സൈസ് കുറയും - ഫോർമാറ്റ് അപ്‌ലോഡിങ്ങിന്)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="processImage()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-lg font-bold shadow transition cursor-pointer">Convert & Download Photo</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="academic" class="tab-content hidden space-y-6">
+            <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                <h3 class="text-lg font-bold text-amber-900 mb-2">Case Converter (English Text)</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="changeCase('up')" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-3 rounded transition cursor-pointer">UPPERCASE</button>
+                    <button onclick="changeCase('low')" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-3 rounded transition cursor-pointer">lowercase</button>
+                    <button onclick="changeCase('sent')" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-3 rounded transition cursor-pointer">Sentence case</button>
+                </div>
+            </div>
+
+            <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+                <h3 class="text-lg font-bold text-purple-900 mb-2">Simple CGPA to Percentage Calculator</h3>
+                <div class="flex gap-4 items-center">
+                    <input type="number" id="cgpaInput" step="0.01" max="10" placeholder="നിങ്ങളുടെ CGPA (eg: 8.5)" class="p-2 border border-slate-200 rounded-md max-w-[200px] bg-white">
+                    <button onclick="calculatePercentage()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition cursor-pointer">Calculate</button>
+                </div>
+                <p id="percentageResult" class="mt-3 text-sm font-bold text-purple-700"></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Switcher Function
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-indigo-600', 'text-white');
+                el.classList.add('text-slate-600', 'hover:bg-slate-200');
+            });
+            btn.classList.add('bg-indigo-600', 'text-white');
+            btn.classList.remove('text-slate-600', 'hover:bg-slate-200');
+        }
+
+        // Word and Character Counter
+        function countText() {
+            let text = document.getElementById('docContent').value;
+            let words = text.trim().split(/\s+/).filter(Boolean).length;
+            document.getElementById('wordCount').innerText = "വാക്കുകൾ: " + words;
+            document.getElementById('charCount').innerText = "അക്ഷരങ്ങൾ: " + text.length;
+        }
+
+        // Download Content as MS Word
+        function downloadWord() {
+            let text = document.getElementById('docContent').value;
+            if(!text.trim()) return alert("ദയവായി എന്തെങ്കിലും കണ്ടെന്റ് ടൈപ്പ് ചെയ്യൂ!");
+            let blob = new Blob(['\ufeff' + text], { type: 'application/msword' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'Student_Assignment.doc';
+            a.click();
+        }
+
+        // Download Content as PDF
+        function downloadPDF() {
+            let text = document.getElementById('docContent').value;
+            if(!text.trim()) return alert("ദയവായി എന്തെങ്കിലും കണ്ടെന്റ് ടൈപ്പ് ചെയ്യൂ!");
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Handle simple multiline formatting for English text
+            let splitText = doc.splitTextToSize(text, 180);
+            doc.text(splitText, 10, 10);
+            doc.save('Student_Assignment.pdf');
+        }
+
+        // Image Converter and Compressor (JPG/PNG & KB reduction)
+        function processImage() {
+            let fileInput = document.getElementById('imageInput');
+            let format = document.getElementById('imageFormat').value;
+            let quality = parseFloat(document.getElementById('imageQuality').value);
+
+            if (fileInput.files.length === 0) return alert("ദയവായി ഒരു ഫോട്ടോ തിരഞ്ഞെടുക്കുക!");
+
+            let file = fileInput.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                let img = new Image();
+                img.onload = function () {
+                    let canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    let ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    // Convert and compress using HTML5 Canvas
+                    let ext = format === 'image/png' ? 'png' : 'jpg';
+                    let dataURL = canvas.toDataURL(format, quality);
+
+                    let a = document.createElement('a');
+                    a.href = dataURL;
+                    a.download = `converted_image.${ext}`;
+                    a.click();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Case Converter
+        function changeCase(type) {
+            let textarea = document.getElementById('docContent');
+            let text = textarea.value;
+            if(type === 'up') textarea.value = text.toUpperCase();
+            if(type === 'low') textarea.value = text.toLowerCase();
+            if(type === 'sent') textarea.value = text.toLowerCase().replace(/(^\s*|[.!?]\s+)([a-z])/g, m => m.toUpperCase());
+            countText();
+        }
+
+        // CGPA Calculator
+        function calculatePercentage() {
+            let cgpa = parseFloat(document.getElementById('cgpaInput').value);
+            if(isNaN(cgpa) || cgpa < 0 || cgpa > 10) return alert("ദയവായി ശരിയായ CGPA നൽകുക (0 - 10)");
+            let percentage = (cgpa * 9.5).toFixed(2); // Standard KTU/Calicut University formula model
+            document.getElementById('percentageResult').innerText = `നിങ്ങളുടെ ഏകദേശ മാർക്ക് ശതമാനം: ${percentage}%`;
+        }
+    </script>
+</body>
+</html>
