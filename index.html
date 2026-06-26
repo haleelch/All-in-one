@@ -15,11 +15,6 @@
         <p class="text-slate-600 text-lg">Free, Fast, and Secure All-in-One Web Utilities</p>
     </header>
 
-    <div class="max-w-xl mx-auto bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-8 text-center text-xs">
-        <label class="block font-bold text-slate-700 mb-1">🔑 Optional: Enter Gemini API Key for AI Features</label>
-        <input type="password" id="user-api-key" placeholder="Paste your Gemini API key here..." class="w-full p-2 border border-slate-300 rounded-lg text-center bg-slate-50">
-    </div>
-
     <div id="home-page" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         <div onclick="openSection('photo-compressor')" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-400 transition duration-300 cursor-pointer flex flex-col items-center text-center group">
             <span class="text-4xl p-4 bg-green-50 text-green-600 rounded-2xl mb-4 group-hover:scale-110 transition duration-300">🖼️</span>
@@ -46,7 +41,7 @@
         </div>
     </div>
 
-    <div id="tool-container" class="max-w-3xl mx-auto hidden">
+    <div id="inner-pages-container" class="max-w-3xl mx-auto hidden">
         <button onclick="goHome()" class="mb-6 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-sm transition flex items-center gap-2">← Back to Home</button>
 
         <div id="photo-compressor" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
@@ -96,9 +91,15 @@
         <div id="doc-pdf-maker" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
             <div class="flex items-center justify-between mb-2">
                 <h2 class="text-2xl font-bold text-slate-800">📄 AI Document & PDF Creator</h2>
-                <span class="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md">Gemini AI</span>
+                <span class="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md">AI Powered</span>
             </div>
             <p class="text-sm text-slate-500 mb-4">Transform simple textual raw data into elegant structures using AI magic before saving.</p>
+            
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 mb-4 text-xs">
+                <label class="block font-bold text-slate-700 mb-1">🔑 Optional: Enter Gemini API Key to use AI features</label>
+                <input type="password" id="user-api-key" placeholder="Paste key here (e.g. AQ.Ab8R...)" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+
             <textarea id="doc-text" rows="8" placeholder="Paste your list or draft content here..." class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm mb-3" oninput="updateCounts()"></textarea>
             
             <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200 mb-4">
@@ -138,34 +139,41 @@
 </div>
 
 <script>
-    // 🏠 NAVIGATION LOGIC (Inner Routing)
+    // 🏠 NAVIGATION ROUTING SYSTEM
     function openSection(sectionId) {
-        document.getElementById('home-page').classList.add('hidden');
-        document.getElementById('tool-container').classList.remove('hidden');
+        // Hide Main Homepage Grid
+        document.getElementById('home-page').style.display = 'none';
         
-        // Hide all tool subviews first
-        document.getElementById('photo-compressor').classList.add('hidden');
-        document.getElementById('doc-pdf-maker').classList.add('hidden');
-        document.getElementById('text-case-converter').classList.add('hidden');
-        document.getElementById('cgpa-calculator').classList.add('hidden');
+        // Unhide Inner Core Container
+        const container = document.getElementById('inner-pages-container');
+        container.classList.remove('hidden');
+        container.style.display = 'block';
         
-        // Show selected one
-        document.getElementById(sectionId).classList.remove('hidden');
+        // Hide all specific sub-tools
+        document.getElementById('photo-compressor').style.display = 'none';
+        document.getElementById('doc-pdf-maker').style.display = 'none';
+        document.getElementById('text-case-converter').style.display = 'none';
+        document.getElementById('cgpa-calculator').style.display = 'none';
+        
+        // Show the exact clicked tool view
+        const targetTool = document.getElementById(sectionId);
+        targetTool.classList.remove('hidden');
+        targetTool.style.display = 'block';
     }
 
     function goHome() {
-        document.getElementById('tool-container').classList.add('hidden');
-        document.getElementById('home-page').classList.remove('hidden');
+        document.getElementById('inner-pages-container').style.display = 'none';
+        document.getElementById('home-page').style.display = 'grid';
     }
 
-    // 🧠 SMART AI CONTEXT PROCESSING
+    // 🧠 AI ENGINE CONNECTION
     async function beautifyWithAI() {
         const textInput = document.getElementById('doc-text').value;
         const aiBtn = document.getElementById('ai-btn');
         const apiKey = document.getElementById('user-api-key').value.trim();
 
         if (!textInput.trim()) { alert("Please type or paste some text first."); return; }
-        if (!apiKey) { alert("Please input your Gemini API Key in the top input box to run AI functions."); return; }
+        if (!apiKey) { alert("Please paste your Gemini API Key inside the option box to format via AI."); return; }
 
         aiBtn.innerText = "Formatting via AI Engine...";
         aiBtn.disabled = true;
@@ -196,116 +204,14 @@
         }
     }
 
-    // 🖼️ PHOTO PROCESSOR LOGIC
+    // 🖼️ IMAGE MANIPULATION
     function previewOriginalImage() {
         const file = document.getElementById('photo-input').files[0];
         if (file) document.getElementById('original-size').innerText = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
     }
 
+    // Handle Dimension Select Labels
     function handleUnitChange() {
         const unit = document.getElementById('size-unit').value;
         document.getElementById('custom-width').placeholder = `Width in ${unit}`;
-        document.getElementById('custom-height').placeholder = `Height in ${unit}`;
-    }
-
-    function processAdvancedPhoto() {
-        const input = document.getElementById('photo-input').files[0];
-        if (!input) { alert("Please select an image file first."); return; }
-
-        const targetKb = parseFloat(document.getElementById('target-kb').value);
-        const unit = document.getElementById('size-unit').value;
-        let customWidth = parseFloat(document.getElementById('custom-width').value);
-        let customHeight = parseFloat(document.getElementById('custom-height').value);
-        const format = document.getElementById('photo-format').value;
-
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = function() {
-                let ppi = 96; 
-                if (unit === 'in') {
-                    if(customWidth) customWidth *= ppi;
-                    if(customHeight) customHeight *= ppi;
-                } else if (unit === 'cm') {
-                    if(customWidth) customWidth *= (ppi / 2.54);
-                    if(customHeight) customHeight *= (ppi / 2.54);
-                }
-
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                let width = customWidth || img.width;
-                let height = customHeight || img.height;
-                
-                if (customWidth && !customHeight) height = img.height * (customWidth / img.width);
-                else if (customHeight && !customWidth) width = img.width * (customHeight / img.height);
-
-                canvas.width = width; canvas.height = height;
-                ctx.drawImage(img, 0, 0, width, height);
-
-                let quality = 0.92;
-                let dataUrl = canvas.toDataURL(format, quality);
-                
-                if (targetKb && format === 'image/jpeg') {
-                    let minQuality = 0.01, maxQuality = 0.98;
-                    for (let i = 0; i < 12; i++) {
-                        quality = (minQuality + maxQuality) / 2;
-                        dataUrl = canvas.toDataURL(format, quality);
-                        const sizeInKb = (dataUrl.split(',')[1].length * 0.75) / 1024;
-                        if (sizeInKb > targetKb) maxQuality = quality;
-                        else minQuality = quality;
-                    }
-                }
-                const link = document.createElement('a');
-                link.href = dataUrl;
-                link.download = 'optimized_image.' + (format === 'image/png' ? 'png' : 'jpg');
-                link.click();
-            };
-        };
-        reader.readAsDataURL(input);
-    }
-
-    // 🔤 TEXT CASE CONVERTER
-    function convertCase(type) {
-        const textArea = document.getElementById('case-converter-text');
-        let text = textArea.value;
-        if (type === 'upper') textArea.value = text.toUpperCase();
-        else if (type === 'lower') textArea.value = text.toLowerCase();
-        else if (type === 'sentence') {
-            textArea.value = text.toLowerCase().replace(/(^|\. *)([a-z])/g, (m, p, c) => p + c.toUpperCase());
-        }
-    }
-
-    // 🎓 CGPA MATHS
-    function calculatePercentage() {
-        const cgpa = parseFloat(document.getElementById('cgpa-input').value);
-        if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
-            document.getElementById('cgpa-result').innerText = "Please enter a valid CGPA.";
-            return;
-        }
-        document.getElementById('cgpa-result').innerText = `Percentage: ${(cgpa * 9.5).toFixed(2)}%`;
-    }
-
-    function updateCounts() {
-        const text = document.getElementById('doc-text').value;
-        document.getElementById('char-count').innerText = text.length;
-        const words = text.trim().split(/\s+/).filter(w => w.length > 0);
-        document.getElementById('word-count').innerText = words.length;
-    }
-
-    // 💾 EXPORT FILE INFRASTRUCTURE
-    function downloadWord() {
-        const text = document.getElementById('doc-text').value;
-        if(!text.trim()) { alert("Please enter text first."); return; }
-        const finalBody = window.aiFormattedOutput || text.replace(/\n/g, '<br>');
-        const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><style>body { font-family: Arial; padding:30px; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid #cbd5e1; padding: 10px; font-size: 11pt; } th { background-color: #1e293b; color: white; }</style></head><body>${finalBody}</body></html>`;
-        const blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'Document.doc';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    }
-
-    function downloadPdf() {
-        const text = document.getElementById('doc-text').value;
-        if(!t
+    
