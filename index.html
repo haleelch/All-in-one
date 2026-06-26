@@ -3,122 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Student Utility Hub - Premium Document & Image Tools</title>
+    <meta name="description" content="Free online AI image compressor, pixel/inch resizer, secure AI PDF maker, and automated Word document creator.">
     
-    <title>Free Student Utility Hub - Online PDF Maker, Photo Compressor & Case Converter</title>
-    <meta name="description" content="Best free online student tools. Compress images to specific KB, resize photo pixels, convert JPG to PNG, create PDF/Word documents, and use text case converter.">
-    <meta name="keywords" content="photo compressor to kb, image resizer online, online pdf maker, word document creator, case converter, convert jpg to png, free student tools, online image compressor, online png Converter">
-    <meta name="robots" content="index, follow">
-    
-    <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE_HERE" />
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800">
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen py-10 px-4">
 
-<div class="max-w-4xl mx-auto my-10 p-6 bg-white rounded-xl shadow-lg">
-    <header class="text-center mb-8">
-        <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Student Utility Hub</h1>
-        <p class="text-slate-600">Professional Free Online Tools: Image Compressor, PDF Maker & Text Converter</p>
+<div class="max-w-5xl mx-auto">
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-2">Student Utility Hub <span class="text-sm bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold uppercase tracking-wide vertical-middle ml-1">AI Powered</span></h1>
+        <p class="text-slate-600 text-lg">Smart AI-driven tools for instant document creation and image optimization</p>
     </header>
 
-    <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8 border-b border-slate-200 pb-4">
-        <button class="px-5 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition font-medium" onclick="showSection('photo-compressor')">Photo Compressor & Converter</button>
-        <button class="px-5 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition font-medium" onclick="showSection('doc-pdf-maker')">Doc & PDF Maker</button>
-        <button class="px-5 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition font-medium" onclick="showSection('cgpa-case-converter')">CGPA & Case Converter</button>
-        <button class="px-5 py-2 bg-amber-600 text-white rounded-lg shadow-md hover:bg-amber-700 transition font-medium" onclick="showSection('google-seo-setup')">Google Search Setup</button>
-    </div>
-
-    <div id="photo-compressor" class="p-6 bg-slate-50 rounded-lg shadow-inner mb-8">
-        <h2 class="text-xl font-bold text-slate-800 mb-4">Advanced Photo Resizer & Compressor (Target KB)</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div class="mb-4">
-            <label class="block text-slate-700 font-medium mb-2">Select Image:</label>
-            <input type="file" id="photo-input" accept="image/*" class="w-full p-2 border border-slate-300 rounded-lg bg-white" onchange="previewOriginalImage()">
-            <p id="original-size" class="text-sm text-slate-500 mt-1"></p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 flex flex-col justify-between md:col-span-2 bg-gradient-to-br from-white to-blue-50/30">
             <div>
-                <label class="block text-slate-700 font-medium mb-2">Convert to Format:</label>
-                <select id="photo-format" class="w-full p-3 border border-slate-300 rounded-lg bg-white">
-                    <option value="image/jpeg">JPG / JPEG</option>
-                    <option value="image/png">PNG</option>
-                </select>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="p-2 bg-blue-100 text-blue-700 rounded-lg font-bold text-xl">✨</span>
+                        <h2 class="text-2xl font-bold text-slate-800">Smart AI Document & PDF Creator</h2>
+                    </div>
+                    <span class="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md">Gemini AI Inside</span>
+                </div>
+                <p class="text-sm text-slate-500 mb-4">Type your raw data, lists, or assignment hints below. Click "Beautify Content with AI" to automatically convert it into a beautiful, structured table or document format before downloading!</p>
+                
+                <textarea id="doc-text" rows="8" placeholder="Paste raw text or list here (e.g., 'Up story writing girls, Hs poetry writing girls...')" class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm mb-3" oninput="updateCounts()"></textarea>
+                
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200 mb-4">
+                    <div class="flex gap-4 text-xs font-semibold text-slate-500">
+                        <div>Words: <span id="word-count" class="text-slate-800 font-bold">0</span></div>
+                        <div>Characters: <span id="char-count" class="text-slate-800 font-bold">0</span></div>
+                    </div>
+                    <button onclick="beautifyWithAI()" id="ai-btn" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm transition flex items-center gap-1.5">
+                        <span>🪄</span> Beautify Content with AI
+                    </button>
+                </div>
             </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                <button onclick="downloadWord()" class="py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow transition duration-200 text-sm">Download Word (.doc)</button>
+                <button onclick="downloadPdf()" class="py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow transition duration-200 text-sm">Download PDF (.pdf)</button>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 flex flex-col justify-between">
             <div>
-                <label class="block text-slate-700 font-medium mb-2">Target Max Size (Optional - KB):</label>
-                <input type="number" id="target-kb" placeholder="e.g. 50" class="w-full p-3 border border-slate-300 rounded-lg bg-white">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="p-2 bg-green-100 text-green-700 rounded-lg font-bold text-xl">🖼️</span>
+                    <h2 class="text-2xl font-bold text-slate-800">Photo Compressor & Resizer</h2>
+                </div>
+                <p class="text-sm text-slate-500 mb-6">Compress to exact KB size, change dimensions in Pixels, Inches, or CM, and convert formats.</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Choose Image File:</label>
+                        <input type="file" id="photo-input" accept="image/*" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 text-sm" onchange="previewOriginalImage()">
+                        <p id="original-size" class="text-xs text-emerald-600 font-medium mt-1"></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Target Size (KB):</label>
+                            <input type="number" id="target-kb" placeholder="e.g. 50" class="w-full p-2.5 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Output Format:</label>
+                            <select id="photo-format" class="w-full p-2.5 border border-slate-300 rounded-lg text-sm bg-white">
+                                <option value="image/jpeg">JPG / JPEG</option>
+                                <option value="image/png">PNG</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Dimension Unit:</label>
+                        <select id="size-unit" class="w-full p-2.5 border border-slate-300 rounded-lg text-sm bg-white" onchange="handleUnitChange()">
+                            <option value="px">Pixels (px)</option>
+                            <option value="in">Inches (in)</option>
+                            <option value="cm">Centimeters (cm)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Width:</label>
+                            <input type="number" id="custom-width" placeholder="Optional" class="w-full p-2.5 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Height:</label>
+                            <input type="number" id="custom-height" placeholder="Optional" class="w-full p-2.5 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="processAdvancedPhoto()" class="w-full mt-6 py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow transition duration-200">Compress & Download Image</button>
+        </div>
+
+        <div class="space-y-8 flex flex-col justify-between">
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="p-2 bg-amber-100 text-amber-700 rounded-lg font-bold text-xl">🔤</span>
+                    <h2 class="text-2xl font-bold text-slate-800">Text Case Converter</h2>
+                </div>
+                <textarea id="case-converter-text" rows="4" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm mb-4" placeholder="Type or paste text here..."></textarea>
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="py-2.5 bg-slate-200 text-slate-800 text-xs font-bold rounded-lg hover:bg-slate-300 transition" onclick="convertCase('upper')">UPPER</button>
+                    <button class="py-2.5 bg-slate-200 text-slate-800 text-xs font-bold rounded-lg hover:bg-slate-300 transition" onclick="convertCase('lower')">LOWER</button>
+                    <button class="py-2.5 bg-slate-200 text-slate-800 text-xs font-bold rounded-lg hover:bg-slate-300 transition" onclick="convertCase('sentence')">SENTENCE</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 flex-1 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="p-2 bg-purple-100 text-purple-700 rounded-lg font-bold text-xl">🎓</span>
+                        <h2 class="text-2xl font-bold text-slate-800">CGPA to Percentage</h2>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="number" id="cgpa-input" step="0.01" placeholder="Enter CGPA (e.g. 8.5)" class="flex-1 p-3 border border-slate-300 rounded-lg text-sm">
+                        <button onclick="calculatePercentage()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg shadow transition duration-200 text-sm">Calculate</button>
+                    </div>
+                </div>
+                <p id="cgpa-result" class="text-lg font-bold text-purple-700 mt-4 min-h-[1.5rem]"></p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-                <label class="block text-slate-700 font-medium mb-2">Custom Width (Pixels - Optional):</label>
-                <input type="number" id="custom-width" placeholder="e.g. 800" class="w-full p-3 border border-slate-300 rounded-lg bg-white">
-            </div>
-            <div>
-                <label class="block text-slate-700 font-medium mb-2">Custom Height (Pixels - Optional):</label>
-                <input type="number" id="custom-height" placeholder="e.g. 600" class="w-full p-3 border border-slate-300 rounded-lg bg-white">
-            </div>
-        </div>
-
-        <button onclick="processAdvancedPhoto()" class="w-full px-6 py-4 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition font-bold text-lg">Compress & Download Image</button>
-    </div>
-
-    <div id="doc-pdf-maker" class="p-6 bg-slate-50 rounded-lg shadow-inner mb-8 hidden">
-        <h2 class="text-xl font-bold text-slate-800 mb-4">Word / PDF Creator & Word Counter</h2>
-        <textarea id="doc-text" rows="8" placeholder="Type or paste your assignment / document content here..." class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4" oninput="updateCounts()"></textarea>
-        <div class="flex gap-4 mb-4 text-sm text-slate-600 font-medium">
-            <div>Words: <span id="word-count" class="text-slate-900 font-bold">0</span></div>
-            <div>Characters: <span id="char-count" class="text-slate-900 font-bold">0</span></div>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-4">
-            <button onclick="downloadWord()" class="w-full sm:w-auto flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition font-bold">Download MS Word (.doc)</button>
-            <button onclick="downloadPdf()" class="w-full sm:w-auto flex-1 px-6 py-3 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition font-bold">Download PDF (.pdf)</button>
-        </div>
-    </div>
-
-    <div id="cgpa-case-converter" class="p-6 bg-slate-50 rounded-lg shadow-inner mb-8 hidden">
-        <h2 class="text-xl font-bold text-slate-800 mb-4">Case Converter (English Text)</h2>
-        <textarea id="case-converter-text" rows="5" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Type or paste your text here to convert case..."></textarea>
-        <div class="flex flex-wrap gap-2 mb-8">
-            <button class="px-4 py-2 bg-slate-200 text-slate-800 font-medium rounded-lg hover:bg-slate-300 transition" onclick="convertCase('upper')">UPPERCASE</button>
-            <button class="px-4 py-2 bg-slate-200 text-slate-800 font-medium rounded-lg hover:bg-slate-300 transition" onclick="convertCase('lower')">lowercase</button>
-            <button class="px-4 py-2 bg-slate-200 text-slate-800 font-medium rounded-lg hover:bg-slate-300 transition" onclick="convertCase('sentence')">Sentence case</button>
-        </div>
-
-        <hr class="border-slate-200 my-6">
-
-        <h2 class="text-xl font-bold text-slate-800 mb-4">CGPA to Percentage Calculator</h2>
-        <div class="flex flex-col sm:flex-row gap-4 items-center mb-4">
-            <input type="number" id="cgpa-input" step="0.01" placeholder="Your CGPA (eg: 8.5)" class="w-full sm:w-auto p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-            <button onclick="calculatePercentage()" class="w-full sm:w-auto px-6 py-4 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition font-bold">Calculate</button>
-        </div>
-        <p id="cgpa-result" class="text-lg font-semibold text-slate-700"></p>
-    </div>
-
-    <div id="google-seo-setup" class="p-6 bg-slate-50 rounded-lg shadow-inner mb-8 hidden">
-        <h2 class="text-xl font-bold text-slate-800 mb-4">How to Add This Website to Google Search</h2>
-        <p class="text-sm text-slate-600 mb-4">To make your website searchable on Google, follow these simple steps:</p>
-        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-3 bg-white p-4 rounded-lg border border-slate-200">
-            <li>Go to <a href="https://search.google.com/search-console" target="_blank" class="text-blue-600 underline font-semibold">Google Search Console</a> and sign in.</li>
-            <li>Select <strong>URL prefix</strong> and enter your Vercel website link (e.g., <code class="bg-slate-100 px-1 rounded">https://your-project.vercel.app</code>).</li>
-            <li>Choose the <strong>HTML Tag</strong> verification method.</li>
-            <li>Copy the verification code provided by Google (the long alphanumeric code inside <code class="bg-slate-100 px-1 rounded">content="..."</code>).</li>
-            <li>Edit your Github <code class="bg-slate-100 px-1 rounded">index.html</code> file, find line 17, and replace <code class="bg-slate-100 px-1 rounded">YOUR_GOOGLE_VERIFICATION_CODE_HERE</code> with your code.</li>
-            <li>Commit the changes. Once Vercel deploys it, click <strong>Verify</strong> in Google Search Console!</li>
-        </ol>
     </div>
 </div>
 
 <script>
-    function showSection(sectionId) {
-        document.getElementById('cgpa-case-converter').classList.add('hidden');
-        document.getElementById('photo-compressor').classList.add('hidden');
-        document.getElementById('doc-pdf-maker').classList.add('hidden');
-        document.getElementById('google-seo-setup').classList.add('hidden');
-        document.getElementById(sectionId).classList.remove('hidden');
+    // 🧠 GEMINI AI CONNECTIVITY FUNCTION
+    async function beautifyWithAI() {
+        const textInput = document.getElementById('doc-text').value;
+        const aiBtn = document.getElementById('ai-btn');
+
+        if (!textInput.trim()) {
+            alert("Please type or paste some text first.");
+            return;
+        }
+
+        // 🛑 INSERT YOUR GEMINI API KEY HERE
+        const apiKey = "AQ.Ab8RN6KODpH9B5IXpVg4woPlSA4h3PiArM8H0iMORotvi_4pCQ"; 
+        
+        if (apiKey === "YOUR_GEMINI_API_KEY_HERE" || !apiKey) {
+            alert("AI Integration Error: Please insert your Gemini API Key in the source code line 148.");
+            return;
+        }
+
+        aiBtn.innerText = "✨ AI is Formatting... Please Wait...";
+        aiBtn.disabled = true;
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+        // Prompt tailored to build professional structures like the image provided
+        const prompt = `You are an expert document design assistant. Take the following raw student data or list and transform it into a perfectly structured, clean HTML table format with a clear header title like 'COMPETITION EVENTS REGISTER'. Structure the columns appropriately (e.g., 'Category Level', 'Event Description', 'Chest No. / Remarks'). Clean up any short forms (like 'LP' to 'LP (Lower Primary)', 'HS' to 'HS (High School)', 'HSS' to 'Higher Secondary School'). Do not return any extra conversation, markdown codeblocks (\`\`\`html) or explanations. Return ONLY the pure raw HTML markup that can be directly displayed. Raw Input Data:\n${textInput}`;
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            const data = await response.json();
+            let aiGeneratedHtml = data.candidates[0].content.parts[0].text;
+            
+            // Clean markdown syntax if AI accidentally outputs it
+            aiGeneratedHtml = aiGeneratedHtml.replace(/```html/g, "").replace(/```/g, "").trim();
+
+            // Set the generated HTML back to the document variable
+            window.aiFormattedOutput = aiGeneratedHtml;
+            
+            // Temporarily show the text feedback to user
+            document.getElementById('doc-text').value = textInput + "\n\n/* ✨ AI Note: Document has been successfully structured! Click 'Download Word' or 'Download PDF' to save your premium document. */";
+            alert("AI Magic Success! Your document is beautifully structured. You can now download it as a PDF or Word file.");
+            
+        } catch (error) {
+            console.error(error);
+            alert("Failed to connect to AI. Please verify your API Key or Network.");
+        } finally {
+            aiBtn.innerHTML = "<span>🪄</span> Beautify Content with AI";
+            aiBtn.disabled = false;
+            updateCounts();
+        }
     }
 
     function previewOriginalImage() {
@@ -128,16 +200,22 @@
         }
     }
 
+    function handleUnitChange() {
+        const unit = document.getElementById('size-unit').value;
+        const wInput = document.getElementById('custom-width');
+        const hInput = document.getElementById('custom-height');
+        wInput.placeholder = `Width in ${unit}`;
+        hInput.placeholder = `Height in ${unit}`;
+    }
+
     function processAdvancedPhoto() {
         const input = document.getElementById('photo-input').files[0];
-        if (!input) {
-            alert("Please select an image file first.");
-            return;
-        }
+        if (!input) { alert("Please select an image file first."); return; }
 
         const targetKb = parseFloat(document.getElementById('target-kb').value);
-        const customWidth = parseInt(document.getElementById('custom-width').value);
-        const customHeight = parseInt(document.getElementById('custom-height').value);
+        const unit = document.getElementById('size-unit').value;
+        let customWidth = parseFloat(document.getElementById('custom-width').value);
+        let customHeight = parseFloat(document.getElementById('custom-height').value);
         const format = document.getElementById('photo-format').value;
 
         const reader = new FileReader();
@@ -145,6 +223,15 @@
             const img = new Image();
             img.src = event.target.result;
             img.onload = function() {
+                let ppi = 96; 
+                if (unit === 'in') {
+                    if(customWidth) customWidth *= ppi;
+                    if(customHeight) customHeight *= ppi;
+                } else if (unit === 'cm') {
+                    if(customWidth) customWidth *= (ppi / 2.54);
+                    if(customHeight) customHeight *= (ppi / 2.54);
+                }
+
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
 
@@ -195,7 +282,7 @@
             return;
         }
         const percentage = (cgpa * 9.5).toFixed(2);
-        document.getElementById('cgpa-result').innerText = `Your approximate percentage is: ${percentage}%`;
+        document.getElementById('cgpa-result').innerText = `Percentage: ${percentage}%`;
     }
 
     function convertCase(type) {
@@ -218,23 +305,59 @@
     function downloadWord() {
         const text = document.getElementById('doc-text').value;
         if(!text.trim()) { alert("Please enter some text first."); return; }
-        const htmlContent = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><style>body { font-family: Arial, sans-serif; padding:20px; }</style></head><body>${text.replace(/\n/g, '<br>')}</body></html>`;
-        const blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'Student_Assignment.doc';
-        link.click();
+        
+        // Use AI HTML output if available, otherwise fallback to plain text format
+        const finalBody = window.aiFormattedOutput || text.replace(/\n/g, '<br>');
+
+        const html = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+            <style>
+                body { font-family: 'Arial', sans-serif; padding:30px; }
+                table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+                th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; font-size: 11pt; }
+                th { background-color: #1e293b; color: white; font-weight: bold; }
+                h1 { font-size: 18pt; text-align: center; color: #0f172a; font-weight: bold; }
+            </style>
+        </head>
+        <body>${finalBody}</body>
+        </html>`;
+
+        const blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'AI_Generated_Document.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 
     function downloadPdf() {
         const text = document.getElementById('doc-text').value;
         if(!text.trim()) { alert("Please enter some text first."); return; }
-        const element = document.createElement('div');
-        element.setAttribute("style", "padding:40px; font-family:Arial; font-size:14px; line-height:1.8; color:#333; white-space:pre-wrap;");
-        element.innerText = text;
-        const opt = { margin: 15, filename: 'Student_Assignment.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-        html2pdf().set(opt).from(element).save();
-    }
-</script>
-</body>
-</html>
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+        doc.setFont("Helvetica", "normal");
+        doc.setFontSize(11);
+
+        // If AI formatted table is active, we strip HTML tags subtly for native jsPDF rendering safely
+        let contentToPrint = text;
+        if(window.aiFormattedOutput) {
+            // Quick strip tags to keep textual data pure in PDF lines
+            contentToPrint = window.aiFormattedOutput.replace(/<\/tr>/g, '\n').replace(/<\/td><td>/g, '  |  ').replace(/<[^>]*>/g, '');
+        }
+
+        const splitText = doc.splitTextToSize(contentToPrint, 180); 
+        let y = 20;
+        const pageHeight = doc.internal.pageSize.height;
+
+        for (let i = 0; i < splitText.length; i++) {
+            if (y > pageHeight - 20) {
+                doc.addPage();
+                y = 20; 
+            }
+            doc.text(splitText[i], 15, y);
+            y += 7; 
+   
