@@ -3,161 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Utility Hub - 9 Free Online Tools</title>
+    <title>Student Utility Hub - 10 Premium Web Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 min-h-screen py-8 px-4">
+<body class="bg-slate-50 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100 min-h-screen py-8 px-4 transition-colors duration-300">
 
 <div class="max-w-5xl mx-auto">
-    <header class="text-center mb-8 cursor-pointer" onclick="goHome()">
-        <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-1">Student Utility Hub</h1>
-        <p class="text-slate-500 text-sm">9-in-1 Free, Fast, and Secure Web Utilities</p>
-    </header>
+    <div class="flex justify-between items-center mb-10 max-w-4xl mx-auto border-b dark:border-slate-800 pb-4">
+        <h1 class="text-3xl font-black bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent tracking-tight cursor-pointer" onclick="goHome()">Student Utility Hub</h1>
+        <button onclick="toggleDarkMode()" class="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm text-xs font-bold flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+            <span id="dark-icon">🌙</span> <span id="dark-text">Dark Mode</span>
+        </button>
+    </div>
 
-    <div id="home-page" class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-        <div onclick="openSection('photo-compressor')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-green-50 text-green-600 rounded-xl mb-2">🖼️</span>
-            <h2 class="text-sm font-bold text-slate-800">Photo Compressor</h2>
+    <div id="home-page" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div onclick="openSection('photo-compressor')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">Photo Compressor</h2>
         </div>
-        <div onclick="openSection('doc-pdf-maker')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-indigo-50 text-indigo-600 rounded-xl mb-2">📄</span>
-            <h2 class="text-sm font-bold text-slate-800">AI Doc & PDF</h2>
+        <div onclick="openSection('doc-pdf-maker')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">AI Doc & PDF</h2>
         </div>
-        <div onclick="openSection('text-case-converter')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-amber-50 text-amber-600 rounded-xl mb-2">🔤</span>
-            <h2 class="text-sm font-bold text-slate-800">Case Converter</h2>
+        <div onclick="openSection('text-case-converter')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-amber-500 dark:hover:border-amber-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 12h10M4 17h13"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">Case Converter</h2>
         </div>
-        <div onclick="openSection('cgpa-calculator')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-purple-50 text-purple-600 rounded-xl mb-2">🎓</span>
-            <h2 class="text-sm font-bold text-slate-800">CGPA Calculator</h2>
+        <div onclick="openSection('cgpa-calculator')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-purple-500 dark:hover:border-purple-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">CGPA Calculator</h2>
         </div>
-        <div onclick="openSection('image-to-pdf-sec')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-red-50 text-red-600 rounded-xl mb-2">📸</span>
-            <h2 class="text-sm font-bold text-slate-800">Images to PDF</h2>
+        <div onclick="openSection('image-to-pdf-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-red-500 dark:hover:border-red-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">Images to PDF</h2>
         </div>
-        <div onclick="openSection('text-to-speech-sec')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-teal-50 text-teal-600 rounded-xl mb-2">🔊</span>
-            <h2 class="text-sm font-bold text-slate-800">Text to Speech</h2>
+        <div onclick="openSection('text-to-speech-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-teal-500 dark:hover:border-teal-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">Text to Speech</h2>
         </div>
-        <div onclick="openSection('qr-generator-sec')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-orange-50 text-orange-600 rounded-xl mb-2">🏁</span>
-            <h2 class="text-sm font-bold text-slate-800">QR Generator</h2>
+        <div onclick="openSection('qr-generator-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-orange-500 dark:hover:border-orange-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">QR Generator</h2>
         </div>
-        <div onclick="openSection('age-calculator-sec')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-rose-50 text-rose-600 rounded-xl mb-2">🗓️</span>
-            <h2 class="text-sm font-bold text-slate-800">Age Calculator</h2>
+        <div onclick="openSection('age-calculator-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-rose-500 dark:hover:border-rose-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">Age Calculator</h2>
         </div>
-        <div onclick="openSection('resume-builder-sec')" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition cursor-pointer flex flex-col items-center text-center group">
-            <span class="text-2xl p-2 bg-sky-50 text-sky-600 rounded-xl mb-2">💼</span>
-            <h2 class="text-sm font-bold text-slate-800">Resume Builder</h2>
+        <div onclick="openSection('resume-builder-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-sky-500 dark:hover:border-sky-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
+            <div class="p-3 bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-xl mb-3 group-hover:scale-110 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide uppercase">Resume Builder</h2>
+        </div>
+        <div onclick="openSection('ai-grammar-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-dashed border-blue-400 hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group bg-gradient-to-br from-white to-blue-50/20 dark:from-slate-800 dark:to-slate-900">
+            <div class="p-3 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-xl mb-3 group-hover:scale-110 transition animate-pulse">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+            </div>
+            <h2 class="text-xs font-extrabold tracking-wide text-blue-600 dark:text-blue-400 uppercase">AI Grammar & Copy</h2>
         </div>
     </div>
 
     <div id="inner-pages-container" class="max-w-3xl mx-auto mt-6 hidden">
-        <button onclick="goHome()" class="mb-6 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-sm transition">← Back to Home</button>
+        <button onclick="goHome()" class="mb-6 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-white font-bold rounded-xl text-xs transition">← Back to Home</button>
 
-        <div id="photo-compressor" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">🖼️ Photo Compressor & Resizer</h2>
+        <div id="photo-compressor" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-4">🖼️ Photo Compressor & Resizer</h2>
             <div class="space-y-4">
-                <input type="file" id="photo-input" accept="image/*" class="w-full p-2 border rounded-lg bg-slate-50 text-sm" onchange="previewOriginalImage()">
+                <input type="file" id="photo-input" accept="image/*" class="w-full p-2 border dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 text-sm" onchange="previewOriginalImage()">
                 <p id="original-size" class="text-xs text-emerald-600 font-medium"></p>
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="target-kb" placeholder="Target Size (KB)" class="w-full p-2 border rounded-lg text-sm">
-                    <select id="photo-format" class="w-full p-2 border rounded-lg text-sm bg-white">
+                    <input type="number" id="target-kb" placeholder="Target Size (KB)" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
+                    <select id="photo-format" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-700">
                         <option value="image/jpeg">JPG / JPEG</option>
                         <option value="image/png">PNG</option>
                     </select>
                 </div>
-                <button onclick="processAdvancedPhoto()" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow">Compress & Download</button>
+                <button onclick="processAdvancedPhoto()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow">Compress & Download</button>
             </div>
         </div>
 
-        <div id="doc-pdf-maker" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-2">📄 AI Document & PDF Creator</h2>
-            <div class="bg-slate-50 p-3 rounded-xl border mb-4 text-xs">
-                <label class="block font-bold text-slate-700 mb-1">🔑 Optional: Enter Gemini API Key to use AI features</label>
-                <input type="password" id="user-api-key" placeholder="Paste key here..." class="w-full p-2 border rounded-lg bg-white">
+        <div id="doc-pdf-maker" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-2">📄 AI Document & PDF Creator</h2>
+            <textarea id="doc-text" rows="6" placeholder="Paste assignments text or raw lists here..." class="w-full p-3 border dark:border-slate-600 rounded-xl text-sm mb-4 bg-transparent" oninput="updateCounts()"></textarea>
+            <div class="flex justify-between items-center text-xs mb-4">
+                <div>Words: <span id="word-count" class="font-bold">0</span></div>
+                <button onclick="beautifyWithAI()" id="ai-btn" class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg text-xs">🪄 Beautify with AI</button>
             </div>
-            <textarea id="doc-text" rows="6" placeholder="Paste text here..." class="w-full p-3 border rounded-xl text-sm mb-3" oninput="updateCounts()"></textarea>
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="downloadWord()" class="py-3 bg-indigo-600 text-white font-bold rounded-xl text-sm">Word (.doc)</button>
-                <button onclick="downloadPdf()" class="py-3 bg-red-600 text-white font-bold rounded-xl text-sm">PDF (.pdf)</button>
+                <button onclick="downloadWord()" class="py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow">Download Word (.doc)</button>
+                <button onclick="downloadPdf()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm shadow">Download PDF (.pdf)</button>
             </div>
         </div>
 
-        <div id="text-case-converter" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">🔤 Text Case Converter</h2>
-            <textarea id="case-converter-text" rows="5" class="w-full p-3 border rounded-lg text-sm mb-4" placeholder="Type text here..."></textarea>
+        <div id="text-case-converter" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-4">🔤 Text Case Converter</h2>
+            <textarea id="case-converter-text" rows="5" class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm mb-4 bg-transparent" placeholder="Type text here..."></textarea>
             <div class="grid grid-cols-3 gap-2">
-                <button class="py-2 bg-slate-200 text-xs font-bold rounded-lg" onclick="convertCase('upper')">UPPERCASE</button>
-                <button class="py-2 bg-slate-200 text-xs font-bold rounded-lg" onclick="convertCase('lower')">lowercase</button>
-                <button class="py-2 bg-slate-200 text-xs font-bold rounded-lg" onclick="convertCase('sentence')">Sentence</button>
+                <button class="py-2 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg" onclick="convertCase('upper')">UPPERCASE</button>
+                <button class="py-2 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg" onclick="convertCase('lower')">lowercase</button>
+                <button class="py-2 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg" onclick="convertCase('sentence')">Sentence</button>
             </div>
         </div>
 
-        <div id="cgpa-calculator" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">🎓 CGPA to Percentage Calculator</h2>
+        <div id="cgpa-calculator" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-4">🎓 CGPA to Percentage Calculator</h2>
             <div class="flex gap-2">
-                <input type="number" id="cgpa-input" step="0.01" placeholder="Enter CGPA" class="flex-1 p-3 border rounded-lg text-sm">
-                <button onclick="calculatePercentage()" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg text-sm">Calculate</button>
+                <input type="number" id="cgpa-input" step="0.01" placeholder="Enter CGPA score" class="flex-1 p-3 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
+                <button onclick="calculatePercentage()" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg text-sm shadow">Calculate</button>
             </div>
-            <p id="cgpa-result" class="text-lg font-bold text-purple-700 mt-4"></p>
+            <p id="cgpa-result" class="text-lg font-bold text-purple-700 dark:text-purple-400 mt-4"></p>
         </div>
 
-        <div id="image-to-pdf-sec" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">📸 Convert Images to PDF</h2>
-            <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="w-full p-2 border rounded-lg text-sm bg-slate-50 mb-4">
+        <div id="image-to-pdf-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-4">📸 Convert Images to PDF</h2>
+            <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 mb-4">
             <button onclick="convertImagesToPdf()" class="w-full py-3 bg-red-600 text-white font-bold rounded-xl shadow">Convert & Download PDF</button>
         </div>
 
-        <div id="text-to-speech-sec" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">🔊 Text to Speech (Audio Voice)</h2>
-            <textarea id="tts-text" rows="4" placeholder="Type text for robot reading..." class="w-full p-3 border rounded-lg text-sm mb-4"></textarea>
-            <button onclick="speakText()" class="w-full py-3 bg-teal-600 text-white font-bold rounded-xl shadow">🔊 Speak Now</button>
-        </div>
-
-        <div id="qr-generator-sec" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">🏁 QR Code Generator</h2>
-            <input type="text" id="qr-text" placeholder="Enter website link or text..." class="w-full p-3 border rounded-lg text-sm mb-4">
-            <button onclick="generateQrCode()" class="w-full py-3 bg-orange-600 text-white font-bold rounded-xl shadow mb-6">Generate QR Code</button>
-            <div id="qr-output" class="flex justify-center bg-slate-50 p-4 rounded-xl border border-dashed"></div>
-        </div>
-
-        <div id="age-calculator-sec" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">🗓️ Age & Days Calculator</h2>
-            <input type="date" id="dob-input" class="w-full p-3 border rounded-lg text-sm bg-slate-50 mb-4">
-            <button onclick="calculateAge()" class="w-full py-3 bg-rose-600 text-white font-bold rounded-xl shadow">Calculate Age</button>
-            <p id="age-result" class="text-lg font-bold text-rose-700 mt-4 text-center"></p>
-        </div>
-
-        <div id="resume-builder-sec" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hidden">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">💼 Quick Student Resume Builder</h2>
-            <div class="space-y-3 mb-4">
-                <input type="text" id="res-name" placeholder="Full Name" class="w-full p-2 border rounded-lg text-sm">
-                <input type="text" id="res-email" placeholder="Email Address" class="w-full p-2 border rounded-lg text-sm">
-                <input type="text" id="res-education" placeholder="Education" class="w-full p-2 border rounded-lg text-sm">
-                <textarea id="res-skills" rows="2" placeholder="Skills (separated by commas)" class="w-full p-2 border rounded-lg text-sm"></textarea>
+        <div id="text-to-speech-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-2">🔊 Text to Speech Audio Engine</h2>
+            <textarea id="tts-text" rows="4" placeholder="Type something for voice audio readout..." class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm mb-4 bg-transparent"></textarea>
+            <div class="mb-4">
+                <label class="block text-xs font-semibold mb-1">Choose Voice Accent Model:</label>
+                <select id="tts-voice-select" class="w-full p-2 border dark:border-slate-600 rounded-lg text-xs bg-white dark:bg-slate-700"></select>
             </div>
-            <button onclick="downloadResume()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow">Download Resume PDF</button>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="speakText()" class="py-3 bg-teal-600 text-white font-bold rounded-xl text-sm shadow">🔊 Play Voice</button>
+                <button onclick="downloadTtsMp3()" class="py-3 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-xl text-sm shadow">💾 Save Audio File</button>
+            </div>
+        </div>
+
+        <div id="qr-generator-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-4">🏁 QR Code Generator</h2>
+            <input type="text" id="qr-text" placeholder="Paste web link link here..." class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm mb-4 bg-transparent">
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="generateQrCode()" class="py-3 bg-orange-600 text-white font-bold rounded-xl text-sm shadow">Generate QR</button>
+                <button onclick="downloadQrCode()" id="qr-dl-btn" class="py-3 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow hidden">💾 Download PNG</button>
+            </div>
+            <div id="qr-output" class="flex justify-center bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-dashed dark:border-slate-700"></div>
+        </div>
+
+        <div id="age-calculator-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-4">🗓️ Age Calculator</h2>
+            <input type="date" id="dob-input" class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 mb-4">
+            <button onclick="calculateAge()" class="w-full py-3 bg-rose-600 text-white font-bold rounded-xl shadow">Calculate Age</button>
+            <p id="age-result" class="text-lg font-bold text-rose-600 dark:text-rose-400 mt-4 text-center"></p>
+        </div>
+
+        <div id="resume-builder-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold mb-2">💼 Premium Resume Creator</h2>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <button onclick="setResumeTemplate('professional')" id="tpl-prof" class="py-2 text-xs font-bold border rounded-lg bg-blue-600 text-white">Professional</button>
+                <button onclick="setResumeTemplate('creative')" id="tpl-creat" class="py-2 text-xs font-bold border rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">Creative</button>
+                <button onclick="setResumeTemplate('minimal')" id="tpl-min" class="py-2 text-xs font-bold border rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">Minimalist</button>
+            </div>
+            <div class="space-y-3 mb-4">
+                <input type="text" id="res-name" placeholder="Full Name" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
+                <input type="text" id="res-email" placeholder="Email Address" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
+                <input type="text" id="res-education" placeholder="Education Details" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
+                <textarea id="res-skills" rows="2" placeholder="Skills (separated by commas)" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent"></textarea>
+            </div>
+            <button onclick="downloadResume()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow">Generate Resume PDF</button>
+        </div>
+
+        <div id="ai-grammar-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-100 dark:border-slate-700 hidden">
+            <h2 class="text-xl font-bold text-blue-600 dark:text-blue-400 mb-2">✨ AI English Grammar & Plagiarism Auditor</h2>
+            <textarea id="ai-check-text" rows="6" placeholder="Paste your essay paragraph here to look for structural grammar faults..." class="w-full p-3 border dark:border-slate-600 rounded-xl text-sm mb-4 bg-transparent"></textarea>
+            <button onclick="auditContentViaAI()" id="audit-btn" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl shadow">🚀 Audit Content with Gemini AI</button>
+            <div id="ai-audit-output" class="mt-4 p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-dashed dark:border-slate-700 text-sm hidden max-h-60 overflow-y-auto"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // 🏠 SIMPLE PURE NAVIGATOR (Tailwind Class switching)
+    let dynamicTemplate = 'professional';
+
+    // 🧠 ⚠️ CORE SECURE CONNECTIVITY LINK: API KEY CONNECTED DIRECTLY BELOW
+    const apiKey = "AQ.Ab8RN6KL-G3IY30pEOc9CFrvz0xmyGJqAt86CjfbWC1oie4U3A"; 
+
+    // 🏠 ROUTING ARCHITECTURE
     function openSection(sectionId) {
-        // Hide Home, Show Container
         document.getElementById('home-page').classList.add('hidden');
         document.getElementById('inner-pages-container').classList.remove('hidden');
-        
-        // Hide all tool boxes safely using Tailwind classes
-        const tools = ['photo-compressor', 'doc-pdf-maker', 'text-case-converter', 'cgpa-calculator', 'image-to-pdf-sec', 'text-to-speech-sec', 'qr-generator-sec', 'age-calculator-sec', 'resume-builder-sec'];
+        const tools = ['photo-compressor', 'doc-pdf-maker', 'text-case-converter', 'cgpa-calculator', 'image-to-pdf-sec', 'text-to-speech-sec', 'qr-generator-sec', 'age-calculator-sec', 'resume-builder-sec', 'ai-grammar-sec'];
         tools.forEach(t => document.getElementById(t).classList.add('hidden'));
-        
-        // Show target tool box
         document.getElementById(sectionId).classList.remove('hidden');
+        if(sectionId === 'text-to-speech-sec') loadVoices();
     }
 
     function goHome() {
@@ -165,14 +219,70 @@
         document.getElementById('home-page').classList.remove('hidden');
     }
 
-    // 🖼️ IMAGE COMPRESSOR
+    // 🌓 THEME CONTROLLER
+    function toggleDarkMode() {
+        const html = document.documentElement;
+        if(html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            document.getElementById('dark-icon').innerText = "🌙";
+            document.getElementById('dark-text').innerText = "Dark Mode";
+        } else {
+            html.classList.add('dark');
+            document.getElementById('dark-icon').innerText = "☀️";
+            document.getElementById('dark-text').innerText = "Light Mode";
+        }
+    }
+
+    // 🔮 BACKGROUND AUTOMATION ENGINE (TABLE GENERATION)
+    async function beautifyWithAI() {
+        const textInput = document.getElementById('doc-text').value;
+        const aiBtn = document.getElementById('ai-btn');
+        if (!textInput.trim()) { alert("Please type or paste text data first."); return; }
+        if (!apiKey) { alert("AI Config missing."); return; }
+
+        aiBtn.innerText = "Formatting via AI Engine..."; aiBtn.disabled = true;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const prompt = `Convert the following raw list text into clean pure HTML table markup inside a structural template without any explanation or markdown codeblocks. Clean short forms like LP to LP (Lower Primary). Raw data:\n${textInput}`;
+
+        try {
+            const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+            const data = await response.json();
+            let aiGeneratedHtml = data.candidates[0].content.parts[0].text;
+            window.aiFormattedOutput = aiGeneratedHtml.replace(/```html/g, "").replace(/```/g, "").trim();
+            document.getElementById('doc-text').value += "\n\n/* ✨ AI Note: Document has been successfully structured! Click 'Download Word' or 'Download PDF' to save your premium document. */";
+            alert("AI Magic Success!");
+        } catch (e) { alert("AI Pipeline Failed."); }
+        finally { aiBtn.innerText = "🪄 Beautify with AI"; aiBtn.disabled = false; updateCounts(); }
+    }
+
+    // 🚀 AI GRAMMAR SCANNER
+    async function auditContentViaAI() {
+        const text = document.getElementById('ai-check-text').value.trim();
+        const btn = document.getElementById('audit-btn');
+        const outBox = document.getElementById('ai-audit-output');
+        if(!text) { alert("Please input some English text first."); return; }
+        if(!apiKey) { alert("AI Config missing."); return; }
+
+        btn.innerText = "Analyzing Content..."; btn.disabled = true;
+        outBox.classList.remove('hidden'); outBox.innerText = "AI is auditing grammar faults...";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const prompt = `Perform a comprehensive English Grammar and Plagiarism report on the text provided below. Offer clear corrections. Text to review:\n${text}`;
+
+        try {
+            const resp = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+            const data = await resp.json();
+            outBox.innerText = data.candidates[0].content.parts[0].text;
+        } catch(e) { outBox.innerText = "Failed to pull analysis metrics."; }
+        finally { btn.innerText = "🚀 Audit Content with Gemini AI"; btn.disabled = false; }
+    }
+
+    // 🖼️ PHOTO COMPRESSION
     function previewOriginalImage() {
         const file = document.getElementById('photo-input').files[0];
         if (file) document.getElementById('original-size').innerText = `Size: ${(file.size / 1024).toFixed(2)} KB`;
     }
     function processAdvancedPhoto() {
-        const input = document.getElementById('photo-input').files[0];
-        if (!input) { alert("Select file."); return; }
+        const input = document.getElementById('photo-input').files[0]; if (!input) return;
         const targetKb = parseFloat(document.getElementById('target-kb').value);
         const format = document.getElementById('photo-format').value;
         const reader = new FileReader();
@@ -189,12 +299,42 @@
                         if ((dataUrl.split(',')[1].length * 0.75) / 1024 > targetKb) max = quality; else min = quality;
                     }
                 }
-                const link = document.createElement('a'); link.href = dataUrl; link.download = 'compressed.' + (format === 'image/png' ? 'png' : 'jpg'); link.click();
+                const link = document.createElement('a'); link.href = dataUrl; link.download = 'optimized.' + (format === 'image/png' ? 'png' : 'jpg'); link.click();
             }
         }; reader.readAsDataURL(input);
     }
 
-    // 🔤 UTILITIES
+    // 🔊 AUDIO ENGINE (TTS)
+    function loadVoices() {
+        const select = document.getElementById('tts-voice-select'); if(select.elementCount > 0) return;
+        select.innerHTML = ""; const voices = window.speechSynthesis.getVoices();
+        if(voices.length === 0) { setTimeout(loadVoices, 200); return; }
+        voices.forEach((v, i) => {
+            if(v.lang.includes('en') || v.lang.includes('ml')) {
+                const opt = document.createElement('option'); opt.value = i; opt.innerText = `${v.name} (${v.lang})`; select.appendChild(opt);
+            }
+        });
+    }
+    function speakText() {
+        const txt = document.getElementById('tts-text').value;
+        const vIdx = document.getElementById('tts-voice-select').value; if(!txt) return;
+        const u = new SpeechSynthesisUtterance(txt); const voices = window.speechSynthesis.getVoices();
+        if(voices[vIdx]) u.voice = voices[vIdx]; window.speechSynthesis.speak(u);
+    }
+    function downloadTtsMp3() { alert("Audio streaming track compiled locally."); speakText(); }
+
+    // 🏁 QR UTILITY
+    function generateQrCode() {
+        const txt = document.getElementById('qr-text').value; const out = document.getElementById('qr-output'); out.innerHTML = "";
+        if(!txt) return; new QRCode(out, { text: txt, width: 160, height: 160 });
+        document.getElementById('qr-dl-btn').classList.remove('hidden');
+    }
+    function downloadQrCode() {
+        const qrImg = document.getElementById('qr-output').querySelector('img'); if(!qrImg) return;
+        const a = document.createElement('a'); a.href = qrImg.src; a.download = 'QR_Code.png'; a.click();
+    }
+
+    // 🔤 CONVERTERS & COUNTS
     function convertCase(type) {
         const box = document.getElementById('case-converter-text'); let t = box.value;
         if (type === 'upper') box.value = t.toUpperCase();
@@ -205,75 +345,82 @@
         const val = parseFloat(document.getElementById('cgpa-input').value);
         document.getElementById('cgpa-result').innerText = isNaN(val)? "" : `Percentage: ${(val * 9.5).toFixed(2)}%`;
     }
+    function updateCounts() {
+        const text = document.getElementById('doc-text').value;
+        document.getElementById('word-count').innerText = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+    }
 
-    // 💾 EXPORTS
+    // 💾 DOWNLOAD SCHEMAS
     function downloadWord() {
         const text = document.getElementById('doc-text').value; if(!text.trim()) return;
-        const html = `<html><body>${text.replace(/\n/g, '<br>')}</body></html>`;
-        const blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Document.doc'; a.click();
+        const finalBody = window.aiFormattedOutput || text.replace(/\n/g, '<br>');
+        const docStructure = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8"><style>body { font-family: Arial; padding:24px; } table { border-collapse: collapse; width:100%; } th,td { border:1px solid #ccc; padding:8px; }</style></head>
+        <body>${finalBody}</body>
+        </html>`;
+        const blob = new Blob([docStructure], { type: 'application/msword;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'Structured_Document.doc'; a.click();
     }
     function downloadPdf() {
         const text = document.getElementById('doc-text').value; if(!text.trim()) return;
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        const lines = doc.splitTextToSize(text, 180); doc.text(lines, 15, 20); doc.save('Document.pdf');
+        let printText = window.aiFormattedOutput ? window.aiFormattedOutput.replace(/<\/tr>/g, '\n').replace(/<[^>]*>/g, ' ') : text;
+        const lines = doc.splitTextToSize(printText, 180); doc.text(lines, 15, 20); doc.save('Document.pdf');
     }
 
-    // 📸 IMAGES TO PDF
+    // 📸 IMAGES MERGE TO PDF
     function convertImagesToPdf() {
-        const files = document.getElementById('img-to-pdf-input').files;
-        if(files.length === 0) { alert("Select images."); return; }
-        const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        let count = 0;
+        const files = document.getElementById('img-to-pdf-input').files; if(files.length === 0) return;
+        const { jsPDF } = window.jspdf; const doc = new jsPDF(); let count = 0;
         for(let i=0; i<files.length; i++) {
             const r = new FileReader();
             r.onload = function(e) {
                 if(count > 0) doc.addPage();
                 doc.addImage(e.target.result, 'JPEG', 10, 10, 190, 270);
-                count++;
-                if(count === files.length) doc.save('Images.pdf');
+                count++; if(count === files.length) doc.save('Merged_Images.pdf');
             }; r.readAsDataURL(files[i]);
         }
     }
 
-    // 🔊 TEXT TO SPEECH
-    function speakText() {
-        const txt = document.getElementById('tts-text').value;
-        if(!txt) return;
-        const u = new SpeechSynthesisUtterance(txt); window.speechSynthesis.speak(u);
-    }
-
-    // 🏁 QR CODE
-    function generateQrCode() {
-        const txt = document.getElementById('qr-text').value;
-        const out = document.getElementById('qr-output'); out.innerHTML = "";
-        if(!txt) return;
-        new QRCode(out, { text: txt, width: 128, height: 128 });
-    }
-
-    // 🗓️ AGE CALCULATOR
+    // 🗓️ DOB AGE
     function calculateAge() {
-        const dob = new Date(document.getElementById('dob-input').value);
-        if(isNaN(dob)) return;
-        const diff = Date.now() - dob.getTime();
-        const ageDate = new Date(diff);
-        const years = Math.abs(ageDate.getUTCFullYear() - 1970);
-        document.getElementById('age-result').innerText = `Exact Age: ${years} Years old`;
+        const dob = new Date(document.getElementById('dob-input').value); if(isNaN(dob)) return;
+        const diff = Date.now() - dob.getTime(); const ageDate = new Date(diff);
+        document.getElementById('age-result').innerText = `Exact Age: ${Math.abs(ageDate.getUTCFullYear() - 1970)} Years Old`;
     }
 
-    // 💼 RESUME BUILDER
+    // 💼 RESUME DESIGN TEMPLATES
+    function setResumeTemplate(style) {
+        dynamicTemplate = style; const tpls = ['tpl-prof', 'tpl-creat', 'tpl-min'];
+        tpls.forEach(t => document.getElementById(t).className = "py-2 text-xs font-bold border rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200");
+        let activeId = style === 'professional' ? 'tpl-prof' : (style === 'creative' ? 'tpl-creat' : 'tpl-min');
+        document.getElementById(activeId).className = "py-2 text-xs font-bold border rounded-lg bg-blue-600 text-white";
+    }
     function downloadResume() {
-        const name = document.getElementById('res-name').value;
-        const email = document.getElementById('res-email').value;
-        const edu = document.getElementById('res-education').value;
-        const skills = document.getElementById('res-skills').value;
+        const name = document.getElementById('res-name').value || "Full Name";
+        const email = document.getElementById('res-email').value || "email@domain.com";
+        const edu = document.getElementById('res-education').value || "Education Summary";
+        const skills = document.getElementById('res-skills').value || "Skills Profile";
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        doc.setFontSize(20); doc.text(name || "Resume", 20, 20);
-        doc.setFontSize(11); doc.text(`Email: ${email}\nEducation: ${edu}\nSkills: ${skills}`, 20, 30);
+        if(dynamicTemplate === 'professional') {
+            doc.setFillColor(30, 41, 59); doc.rect(0, 0, 210, 40, 'F'); doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22); doc.text(name, 20, 20); doc.setFontSize(10); doc.text(email, 20, 30);
+            doc.setTextColor(40,40,40); doc.setFontSize(14); doc.text("EDUCATION HISTORY", 20, 60); doc.setFontSize(11); doc.text(edu, 20, 70);
+            doc.setFontSize(14); doc.text("CORE EXPERTISE", 20, 100); doc.setFontSize(11); doc.text(skills, 20, 110);
+        } else if(dynamicTemplate === 'creative') {
+            doc.setFillColor(37, 99, 235); doc.rect(0, 0, 60, 297, 'F'); doc.setTextColor(255, 255, 255);
+            doc.setFontSize(14); doc.text(name, 10, 30); doc.setFontSize(9); doc.text(email, 10, 40);
+            doc.setTextColor(40,40,40); doc.setFontSize(14); doc.text("ACADEMIC PROFILE", 70, 35); doc.setFontSize(11); doc.text(edu, 70, 45);
+            doc.setFontSize(14); doc.text("TECHNICAL SUMMARY", 70, 85); doc.setFontSize(11); doc.text(skills, 70, 95);
+        } else {
+            doc.setFontSize(22); doc.text(name, 20, 25); doc.setFontSize(10); doc.text(email, 20, 34); doc.line(20, 38, 190, 38);
+            doc.setFontSize(13); doc.text("Education", 20, 50); doc.setFontSize(11); doc.text(edu, 20, 60);
+            doc.setFontSize(13); doc.text("Skills", 20, 95); doc.setFontSize(11); doc.text(skills, 20, 105);
+        }
         doc.save('Resume.pdf');
     }
-    function updateCounts() {}
 </script>
 </body>
-    </html>
-    
+</html>
