@@ -5,76 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Utility Hub - 10 Premium Web Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100 min-h-screen py-8 px-4 transition-colors duration-300">
+<body id="main-body" class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4 transition-colors duration-300">
 
 <div class="max-w-5xl mx-auto">
-    <div class="flex justify-between items-center mb-10 max-w-4xl mx-auto border-b dark:border-slate-800 pb-4">
+    <div class="flex justify-between items-center mb-10 max-w-4xl mx-auto border-b pb-4 border-slate-200" id="top-bar">
         <h1 class="text-3xl font-black bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent tracking-tight cursor-pointer" onclick="goHome()">Student Utility Hub</h1>
-        <button onclick="toggleDarkMode()" class="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm text-xs font-bold flex items-center gap-2 transition">
+        <button onclick="toggleDarkMode()" class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm text-xs font-bold flex items-center gap-2 transition" id="theme-btn">
             <span id="dark-icon">🌙</span> <span id="dark-text">Dark Mode</span>
         </button>
     </div>
 
     <div id="home-page" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
-        <div onclick="openSection('photo-compressor')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
+        <div onclick="openSection('photo-compressor')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-1">
+            <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">Photo Compressor</h2>
         </div>
-        <div onclick="openSection('doc-pdf-maker')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-indigo-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
+        <div onclick="openSection('doc-pdf-maker')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-indigo-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-2">
+            <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">AI Doc & PDF</h2>
         </div>
-        <div onclick="openSection('text-case-converter')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-amber-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 12h10M4 17h13"></path></svg></div>
+        <div onclick="openSection('text-case-converter')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-amber-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-3">
+            <div class="p-3 bg-amber-50 text-amber-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 12h10M4 17h13"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">Case Converter</h2>
         </div>
-        <div onclick="openSection('cgpa-calculator')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-purple-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg></div>
+        <div onclick="openSection('cgpa-calculator')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-purple-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-4">
+            <div class="p-3 bg-purple-50 text-purple-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">CGPA Calculator</h2>
         </div>
-        <div onclick="openSection('image-to-pdf-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-red-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg></div>
+        <div onclick="openSection('image-to-pdf-sec')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-red-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-5">
+            <div class="p-3 bg-red-50 text-red-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">Images to PDF</h2>
         </div>
-        <div onclick="openSection('text-to-speech-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-teal-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></div>
+        <div onclick="openSection('text-to-speech-sec')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-teal-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-6">
+            <div class="p-3 bg-teal-50 text-teal-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">Text to Speech</h2>
         </div>
-        <div onclick="openSection('qr-generator-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-orange-500 dark:hover:border-orange-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg></div>
+        <div onclick="openSection('qr-generator-sec')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-orange-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-7">
+            <div class="p-3 bg-orange-50 text-orange-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">QR Generator</h2>
         </div>
-        <div onclick="openSection('age-calculator-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-rose-500 dark:hover:border-rose-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
+        <div onclick="openSection('age-calculator-sec')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-rose-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-8">
+            <div class="p-3 bg-rose-50 text-rose-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">Age Calculator</h2>
         </div>
-        <div onclick="openSection('resume-builder-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 hover:border-sky-500 dark:hover:border-sky-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group">
-            <div class="p-3 bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div>
+        <div onclick="openSection('resume-builder-sec')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-sky-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-9">
+            <div class="p-3 bg-sky-50 text-sky-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div>
             <h2 class="text-xs font-extrabold tracking-wide uppercase">Resume Builder</h2>
         </div>
-        <div onclick="openSection('ai-grammar-sec')" class="bg-white p-5 dark:bg-slate-800 rounded-2xl shadow-sm border border-dashed border-blue-400 hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group bg-gradient-to-br from-white to-blue-50/20 dark:from-slate-800 dark:to-slate-900">
-            <div class="p-3 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide text-blue-600 dark:text-blue-400 uppercase">AI Grammar & Copy</h2>
+        <div onclick="openSection('ai-grammar-sec')" class="bg-white p-5 rounded-2xl shadow-sm border border-dashed border-blue-400 hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group bg-gradient-to-br from-white to-blue-50/20" id="card-10">
+            <div class="p-3 bg-blue-100 text-blue-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
+            <h2 class="text-xs font-extrabold tracking-wide text-blue-600 uppercase">AI Grammar & Copy</h2>
         </div>
     </div>
 
     <div id="inner-pages-container" class="max-w-3xl mx-auto mt-6 hidden">
-        <button onclick="goHome()" class="mb-6 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-white font-bold rounded-xl text-xs transition">← Back to Home</button>
+        <button onclick="goHome()" class="mb-6 px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition" id="back-btn">← Back to Home</button>
 
-        <div id="photo-compressor" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="photo-compressor" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-4">🖼️ Photo Compressor & Resizer</h2>
             <div class="space-y-4">
-                <input type="file" id="photo-input" accept="image/*" class="w-full p-2 border dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 text-sm" onchange="previewOriginalImage()">
+                <input type="file" id="photo-input" accept="image/*" class="w-full p-2 border rounded-lg bg-slate-50 text-sm" onchange="previewOriginalImage()">
                 <p id="original-size" class="text-xs text-emerald-600 font-medium"></p>
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="target-kb" placeholder="Target Size (KB)" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
-                    <select id="photo-format" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-700">
+                    <input type="number" id="target-kb" placeholder="Target Size (KB)" class="w-full p-2 border rounded-lg text-sm bg-transparent">
+                    <select id="photo-format" class="w-full p-2 border rounded-lg text-sm bg-white">
                         <option value="image/jpeg">JPG / JPEG</option>
                         <option value="image/png">PNG</option>
                     </select>
@@ -83,11 +80,11 @@
             </div>
         </div>
 
-        <div id="doc-pdf-maker" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="doc-pdf-maker" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-2">📄 AI Document & PDF Creator</h2>
-            <textarea id="doc-text" rows="6" placeholder="Paste assignments text or raw lists here..." class="w-full p-3 border dark:border-slate-600 rounded-xl text-sm mb-2 bg-transparent" oninput="updateLiveCounts()"></textarea>
+            <textarea id="doc-text" rows="6" placeholder="Paste assignments text or raw lists here..." class="w-full p-3 border rounded-xl text-sm mb-2 bg-transparent" oninput="updateLiveCounts()"></textarea>
             
-            <div class="flex gap-4 text-xs font-semibold text-slate-500 dark:text-slate-400 mb-4 bg-slate-50 dark:bg-slate-900 p-2 rounded-lg">
+            <div class="flex gap-4 text-xs font-semibold text-slate-500 mb-4 bg-slate-50 p-2 rounded-lg" id="counter-box">
                 <div>Words: <span id="live-word-count" class="text-blue-600 font-bold">0</span></div>
                 <div>Letters/Characters: <span id="live-char-count" class="text-indigo-600 font-bold">0</span></div>
             </div>
@@ -101,78 +98,124 @@
             </div>
         </div>
 
-        <div id="text-case-converter" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="text-case-converter" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-4">🔤 Text Case Converter</h2>
-            <textarea id="case-converter-text" rows="5" class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm mb-4 bg-transparent" placeholder="Type text here..."></textarea>
+            <textarea id="case-converter-text" rows="5" class="w-full p-3 border rounded-lg text-sm mb-4 bg-transparent" placeholder="Type text here..."></textarea>
             <div class="grid grid-cols-3 gap-2">
-                <button class="py-2 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg" onclick="convertCase('upper')">UPPERCASE</button>
-                <button class="py-2 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg" onclick="convertCase('lower')">lowercase</button>
-                <button class="py-2 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg" onclick="convertCase('sentence')">Sentence</button>
+                <button class="py-2 bg-slate-200 text-xs font-bold rounded-lg btn-gray" onclick="convertCase('upper')">UPPERCASE</button>
+                <button class="py-2 bg-slate-200 text-xs font-bold rounded-lg btn-gray" onclick="convertCase('lower')">lowercase</button>
+                <button class="py-2 bg-slate-200 text-xs font-bold rounded-lg btn-gray" onclick="convertCase('sentence')">Sentence</button>
             </div>
         </div>
 
-        <div id="cgpa-calculator" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="cgpa-calculator" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-4">🎓 CGPA to Percentage Calculator</h2>
             <div class="flex gap-2">
-                <input type="number" id="cgpa-input" step="0.01" placeholder="Enter CGPA score" class="flex-1 p-3 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
+                <input type="number" id="cgpa-input" step="0.01" placeholder="Enter CGPA score" class="flex-1 p-3 border rounded-lg text-sm bg-transparent">
                 <button onclick="calculatePercentage()" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg text-sm shadow">Calculate</button>
             </div>
-            <p id="cgpa-result" class="text-lg font-bold text-purple-600 mt-4"></p>
+            <p id="cgpa-result" class="text-lg font-bold text-purple-700 mt-4"></p>
         </div>
 
-        <div id="image-to-pdf-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="image-to-pdf-sec" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-4">📸 Convert Images to PDF</h2>
-            <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 mb-4">
+            <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="w-full p-2 border rounded-lg text-sm bg-slate-50 mb-4" id="pdf-img-picker">
             <button onclick="convertImagesToPdf()" class="w-full py-3 bg-red-600 text-white font-bold rounded-xl shadow">Convert & Download PDF</button>
         </div>
 
-        <div id="text-to-speech-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="text-to-speech-sec" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-2">🔊 Text to Speech Audio Engine</h2>
-            <textarea id="tts-text" rows="4" placeholder="Type English text to build speech tracks..." class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm mb-4 bg-transparent"></textarea>
+            <textarea id="tts-text" rows="4" placeholder="Type text here for audio readout..." class="w-full p-3 border rounded-lg text-sm mb-4 bg-transparent"></textarea>
             <div class="mb-4">
                 <label class="block text-xs font-semibold mb-1">Choose Accent Model Voice:</label>
-                <select id="tts-voice-select" class="w-full p-2 border dark:border-slate-600 rounded-lg text-xs bg-white dark:bg-slate-700"></select>
+                <select id="tts-voice-select" class="w-full p-2 border rounded-lg text-xs bg-white text-slate-800"></select>
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <button onclick="speakText()" class="py-3 bg-teal-600 text-white font-bold rounded-xl text-sm shadow">🔊 Play Voice</button>
-                <button onclick="downloadTtsAudioFile()" class="py-3 bg-slate-800 dark:bg-slate-700 text-white font-bold rounded-xl text-sm shadow">💾 Download Audio (.wav)</button>
+                <button onclick="downloadTtsAudioFile()" class="py-3 bg-slate-800 text-white font-bold rounded-xl text-sm shadow">💾 Download Audio (.wav)</button>
             </div>
         </div>
 
-        <div id="qr-generator-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
-            <h2 class="text-xl font-bold mb-4">🏁 Official QR Code Generator</h2>
-            <input type="text" id="qr-text" placeholder="Enter target website link (e.g. https://google.com)" class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm mb-4 bg-transparent">
+        <div id="qr-generator-sec" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
+            <h2 class="text-xl font-bold mb-4">🏁 QR Code Generator</h2>
+            <input type="text" id="qr-text" placeholder="Enter link (e.g. https://google.com)" class="w-full p-3 border rounded-lg text-sm mb-4 bg-transparent">
             <div class="grid grid-cols-2 gap-3 mb-6">
                 <button onclick="generateQrCode()" class="py-3 bg-orange-600 text-white font-bold rounded-xl text-sm shadow">Generate QR</button>
                 <button onclick="downloadQrCode()" id="qr-dl-btn" class="py-3 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow hidden">💾 Download PNG</button>
             </div>
-            <div id="qr-output" class="flex justify-center bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-dashed"></div>
+            <div id="qr-output" class="flex justify-center bg-slate-50 p-4 rounded-xl border border-dashed"></div>
         </div>
 
-        <div id="age-calculator-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="age-calculator-sec" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-4">🗓️ Age Calculator</h2>
-            <input type="date" id="dob-input" class="w-full p-3 border dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 mb-4">
+            <input type="date" id="dob-input" class="w-full p-3 border rounded-lg text-sm bg-slate-50 mb-4" id="dob-picker">
             <button onclick="calculateAge()" class="w-full py-3 bg-rose-600 text-white font-bold rounded-xl shadow">Calculate Age</button>
             <p id="age-result" class="text-lg font-bold text-rose-600 mt-4 text-center"></p>
         </div>
 
-        <div id="resume-builder-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
+        <div id="resume-builder-sec" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
             <h2 class="text-xl font-bold mb-2">💼 Premium Resume Creator</h2>
             <div class="grid grid-cols-3 gap-2 mb-4">
                 <button onclick="setResumeTemplate('professional')" id="tpl-prof" class="py-2 text-xs font-bold border rounded-lg bg-blue-600 text-white">Professional</button>
-                <button onclick="setResumeTemplate('creative')" id="tpl-creat" class="py-2 text-xs font-bold border rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">Creative</button>
-                <button onclick="setResumeTemplate('minimal')" id="tpl-min" class="py-2 text-xs font-bold border rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">Minimalist</button>
+                <button onclick="setResumeTemplate('creative')" id="tpl-creat" class="py-2 text-xs font-bold border rounded-lg bg-slate-100 text-slate-700 btn-gray">Creative</button>
+                <button onclick="setResumeTemplate('minimal')" id="tpl-min" class="py-2 text-xs font-bold border rounded-lg bg-slate-100 text-slate-700 btn-gray">Minimalist</button>
             </div>
             <div class="space-y-3 mb-4">
-                <input type="text" id="res-name" placeholder="Full Name" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
-                <input type="text" id="res-email" placeholder="Email Address" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
-                <input type="text" id="res-education" placeholder="Education Details Profile" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent">
-                <textarea id="res-skills" rows="2" placeholder="Skills (separated by commas)" class="w-full p-2 border dark:border-slate-600 rounded-lg text-sm bg-transparent"></textarea>
+                <input type="text" id="res-name" placeholder="Full Name" class="w-full p-2 border rounded-lg text-sm bg-transparent">
+                <input type="text" id="res-email" placeholder="Email Address" class="w-full p-2 border rounded-lg text-sm bg-transparent">
+                <input type="text" id="res-education" placeholder="Education Details Profile" class="w-full p-2 border rounded-lg text-sm bg-transparent">
+                <textarea id="res-skills" rows="2" placeholder="Skills (separated by commas)" class="w-full p-2 border rounded-lg text-sm bg-transparent"></textarea>
             </div>
-            <button onclick="downloadResume()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow">Generate Layout Resume</button>
+            <button onclick="downloadResume()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow">Generate Resume PDF</button>
         </div>
 
-        <div id="ai-grammar-sec" class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border hidden">
-            <h2 class="text-xl font-bold text-blue-600 dark:text-blue-400 mb-2">✨ AI English Grammar Auditor</h2>
-            <textarea id="ai-check-text" rows="6" placeholder="Paste essay here to check grammar errors..." class="w-full p-3 border dark:border-slate-600 rounded-xl text-sm mb-4 bg-transparent"></textarea>
-            <button onclick="auditContentViaAI()" id="audit-btn" class="w-full py-3 bg-blue-600 text-white fo
+        <div id="ai-grammar-sec" class="bg-white p-6 rounded-2xl shadow border hidden inner-card">
+            <h2 class="text-xl font-bold text-blue-600 mb-2">✨ AI English Grammar Auditor</h2>
+            <textarea id="ai-check-text" rows="6" placeholder="Paste essay here to check grammar errors..." class="w-full p-3 border rounded-xl text-sm mb-4 bg-transparent"></textarea>
+            <button onclick="auditContentViaAI()" id="audit-btn" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl shadow">🚀 Audit Content Rules</button>
+            <div id="ai-audit-output" class="mt-4 p-4 bg-slate-50 rounded-xl border border-dashed text-sm hidden max-h-60 overflow-y-auto"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let dynamicTemplate = 'professional';
+    window.aiFormattedOutput = "";
+    let isDarkModeActive = false;
+
+    // 🔒 ACTIVE SECURITY KEY ASSIGNED SAFELY
+    const apiKey = "AQ.Ab8RN6KL-G3IY30pEOc9CFrvz0xmyGJqAt86CjfbWC1oie4U3A"; 
+
+    // 🏠 TRUE HARDWARE SWIPE / BROWSER BACK SYSTEM SUPPORT
+    window.addEventListener('popstate', function(event) {
+        if (!document.getElementById('home-page').classList.contains('hidden')) {
+            // Already home
+        } else {
+            goHomeDirectlyWithoutHistory();
+        }
+    });
+
+    function openSection(sectionId) {
+        window.history.pushState({page: sectionId}, "");
+
+        document.getElementById('home-page').classList.add('hidden');
+        document.getElementById('inner-pages-container').classList.remove('hidden');
+        
+        // Hide all inner view cards safely
+        const cards = document.querySelectorAll('.inner-card');
+        cards.forEach(c => c.classList.add('hidden'));
+        
+        document.getElementById(sectionId).classList.remove('hidden');
+        if(sectionId === 'text-to-speech-sec') loadVoices();
+    }
+
+    function goHome() {
+        window.history.back();
+    }
+
+    function goHomeDirectlyWithoutHistory() {
+        document.getElementById('inner-pages-container').classList.add('hidden');
+        document.getElementById('home-page').classList.remove('hidden');
+    }
+
+    // 🌓 100% PURE JAVASCRIPT DARK MO
