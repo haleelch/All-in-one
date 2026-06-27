@@ -1,217 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Utility Hub - 10 Premium Web Tools</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        /* Dark mode is driven entirely by a single class on <html>, using Tailwind's
-           dark: variants. No JS class-juggling on individual elements needed. */
-        html.dark body { background-color: #0f172a; color: #f1f5f9; }
-        html.dark #top-bar { border-color: #1e293b; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Utility Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --paper:#F7F5F1;
+    --ink:#0B1120;
+    --panel:#1A2332;
+    --panel-light:#FFFFFF;
+    --muted:#8B95A8;
+    --muted-light:#6B7280;
+    --line:#E4E0D8;
+    --line-dark:#2A3344;
+    --signal:#FF6B35;
+    --signal-dim:#FFE4D6;
+    --ok:#22C55E;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    transition:background .25s ease, color .25s ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  html.dark body{ background:var(--ink); color:#F1F0EC; }
 
-        .surface {
-            background-color: #ffffff;
-            border-color: #f1f5f9;
-        }
-        html.dark .surface {
-            background-color: #1e293b;
-            border-color: #334155;
-            color: #f1f5f9;
-        }
+  .mono{ font-family:'JetBrains Mono',monospace; }
+  .display{ font-family:'Space Grotesk',sans-serif; }
 
-        .field {
-            background-color: transparent;
-            color: inherit;
-            border-color: #e2e8f0;
-        }
-        html.dark .field {
-            background-color: #0f172a;
-            border-color: #334155;
-            color: #f1f5f9;
-        }
-        html.dark .field::placeholder { color: #64748b; }
-        html.dark select.field option { background-color: #0f172a; color: #f1f5f9; }
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:2px solid var(--signal);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
 
-        html.dark #theme-btn { background-color: #1e293b; border-color: #334155; color: #f1f5f9; }
-        html.dark #counter-box { background-color: #0f172a; color: #94a3b8; }
-        html.dark #back-btn { background-color: #1e293b; color: #f1f5f9; }
-        html.dark #qr-output, html.dark #ai-audit-output { background-color: #0f172a; border-color: #334155; }
+  .wrap{ max-width:920px; margin:0 auto; padding:28px 20px 80px; }
 
-        .btn-gray { background-color: #f1f5f9; color: #334155; }
-        html.dark .btn-gray { background-color: #334155 !important; color: #f1f5f9 !important; border-color: #475569 !important; }
-        html.dark .btn-gray.is-active { background-color: #2563eb !important; color: #ffffff !important; }
+  /* ---------- Header ---------- */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:20px; margin-bottom:28px;
+    border-bottom:1px solid var(--line);
+  }
+  html.dark .topbar{ border-color:var(--line-dark); }
+  .brand{
+    display:flex; align-items:baseline; gap:10px; cursor:pointer;
+    background:none; border:none; padding:0;
+  }
+  .brand-mark{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px;
+    letter-spacing:-0.01em; color:var(--ink);
+  }
+  html.dark .brand-mark{ color:#F1F0EC; }
+  .brand-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.12em;
+    border:1px solid var(--line); border-radius:100px; padding:3px 8px;
+  }
+  html.dark .brand-tag{ border-color:var(--line-dark); color:var(--muted); }
 
-        .home-card { background-color: #ffffff; border-color: #f1f5f9; }
-        html.dark .home-card { background-color: #1e293b; border-color: #334155; color: #f1f5f9; }
-    </style>
+  .theme-toggle{
+    display:flex; align-items:center; gap:8px;
+    background:var(--panel-light); border:1px solid var(--line);
+    border-radius:100px; padding:7px 14px;
+    font-size:11px; font-weight:600; letter-spacing:.02em;
+    color:var(--ink);
+  }
+  html.dark .theme-toggle{ background:var(--panel); border-color:var(--line-dark); color:#F1F0EC; }
+
+  /* ---------- Toolboard (home grid) ---------- */
+  .board-label{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); margin-bottom:14px;
+  }
+  .board{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:10px;
+  }
+  @media (min-width:640px){ .board{ grid-template-columns:repeat(4,1fr); } }
+
+  .tool-card{
+    position:relative;
+    background:var(--panel-light);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 14px 16px;
+    text-align:left;
+    display:flex; flex-direction:column; gap:10px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  html.dark .tool-card{ background:var(--panel); border-color:var(--line-dark); color:#F1F0EC; }
+  .tool-card:hover{ border-color:var(--signal); transform:translateY(-1px); }
+  .tool-index{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);
+  }
+  .tool-icon{
+    width:34px; height:34px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--signal); background:var(--signal-dim);
+  }
+  html.dark .tool-icon{ background:rgba(255,107,53,.14); }
+  .tool-icon svg{ width:18px; height:18px; }
+  .tool-name{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px;
+    line-height:1.25;
+  }
+
+  /* ---------- Inner tool pages ---------- */
+  .tool-page{ display:none; }
+  .tool-page.active{ display:block; }
+
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:none; color:var(--muted);
+    font-size:12px; font-weight:600; padding:0; margin-bottom:18px;
+  }
+  .back-btn:hover{ color:var(--signal); }
+
+  .tool-header{
+    display:flex; align-items:flex-start; gap:14px;
+    margin-bottom:22px; padding-bottom:18px; border-bottom:1px solid var(--line);
+  }
+  html.dark .tool-header{ border-color:var(--line-dark); }
+  .tool-header .tool-icon{ width:42px; height:42px; flex-shrink:0; }
+  .tool-header .tool-icon svg{ width:22px; height:22px; }
+  .tool-title{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; margin:0 0 4px; }
+  .tool-desc{ font-size:13px; color:var(--muted-light); margin:0; line-height:1.5; }
+  html.dark .tool-desc{ color:var(--muted); }
+
+  .panel{
+    background:var(--panel-light); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px;
+  }
+  html.dark .panel{ background:var(--panel); border-color:var(--line-dark); }
+
+  label.field-label{ display:block; font-size:11px; font-weight:600; letter-spacing:.03em; color:var(--muted-light); margin-bottom:6px; text-transform:uppercase; }
+  html.dark label.field-label{ color:var(--muted); }
+
+  .field{
+    width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:9px;
+    background:var(--paper); color:var(--ink); font-size:14px; font-family:inherit;
+  }
+  html.dark .field{ background:var(--ink); border-color:var(--line-dark); color:#F1F0EC; }
+  .field::placeholder{ color:var(--muted); }
+  .field:focus{ border-color:var(--signal); }
+
+  textarea.field{ resize:vertical; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:13px 18px; border-radius:9px; border:none;
+    font-weight:600; font-size:14px; letter-spacing:.01em;
+    transition:opacity .15s ease, transform .1s ease;
+  }
+  .btn:active{ transform:scale(.98); }
+  .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+  .btn-primary{ background:var(--ink); color:#fff; }
+  html.dark .btn-primary{ background:var(--signal); color:#1A0E07; }
+  .btn-signal{ background:var(--signal); color:#fff; }
+  .btn-ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+  html.dark .btn-ghost{ border-color:var(--line-dark); color:#F1F0EC; }
+  .btn-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+  .readout{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted-light);
+    background:var(--paper); border:1px solid var(--line); border-radius:8px;
+    padding:9px 12px; margin-top:10px;
+  }
+  html.dark .readout{ background:var(--ink); border-color:var(--line-dark); color:var(--muted); }
+  .readout .ok{ color:var(--ok); font-weight:600; }
+  .readout .num{ color:var(--signal); font-weight:600; }
+
+  .hint{ font-size:12px; color:var(--muted-light); line-height:1.6; margin-top:12px; }
+  html.dark .hint{ color:var(--muted); }
+
+  .stack{ display:flex; flex-direction:column; gap:12px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+  .chip-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .chip{
+    padding:10px 8px; border-radius:8px; border:1px solid var(--line);
+    background:var(--paper); font-size:12px; font-weight:600; text-align:center; color:var(--ink);
+  }
+  html.dark .chip{ background:var(--ink); border-color:var(--line-dark); color:#F1F0EC; }
+  .chip.is-active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  html.dark .chip.is-active{ background:var(--signal); color:#1A0E07; border-color:var(--signal); }
+
+  .qr-stage{
+    display:flex; justify-content:center; align-items:center; min-height:190px;
+    background:var(--paper); border:1px dashed var(--line); border-radius:9px; margin-top:14px;
+    padding:14px;
+  }
+  html.dark .qr-stage{ background:var(--ink); border-color:var(--line-dark); }
+
+  .audit-box{
+    margin-top:14px; padding:16px; border-radius:9px; border:1px dashed var(--line);
+    background:var(--paper); font-size:13px; line-height:1.7; max-height:280px; overflow-y:auto;
+  }
+  html.dark .audit-box{ background:var(--ink); border-color:var(--line-dark); }
+  .audit-box.is-hidden{ display:none; }
+
+  .badge-count{
+    display:inline-flex; gap:14px; font-family:'JetBrains Mono',monospace; font-size:12px;
+    color:var(--muted-light); margin-top:10px;
+  }
+  html.dark .badge-count{ color:var(--muted); }
+  .badge-count b{ color:var(--signal); }
+
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+  html.dark ::-webkit-scrollbar-thumb{ background:var(--line-dark); }
+</style>
 </head>
-<body id="main-body" class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4 transition-colors duration-300">
+<body>
 
-<div class="max-w-5xl mx-auto">
-    <div class="flex justify-between items-center mb-10 max-w-4xl mx-auto border-b pb-4 border-slate-200" id="top-bar">
-        <h1 class="text-3xl font-black bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent tracking-tight cursor-pointer" onclick="goHome()">Student Utility Hub</h1>
-        <button onclick="toggleDarkMode()" class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm text-xs font-bold flex items-center gap-2 transition" id="theme-btn">
-            <span id="dark-icon">🌙</span> <span id="dark-text">Dark Mode</span>
-        </button>
-    </div>
+<div class="wrap">
 
-    <div id="home-page" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
-        <div onclick="openSection('photo-compressor')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-1">
-            <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">Photo Compressor</h2>
-        </div>
-        <div onclick="openSection('doc-pdf-maker')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-indigo-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-2">
-            <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">Doc & PDF Maker</h2>
-        </div>
-        <div onclick="openSection('text-case-converter')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-amber-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-3">
-            <div class="p-3 bg-amber-50 text-amber-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 12h10M4 17h13"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">Case Converter</h2>
-        </div>
-        <div onclick="openSection('cgpa-calculator')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-purple-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-4">
-            <div class="p-3 bg-purple-50 text-purple-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">CGPA Calculator</h2>
-        </div>
-        <div onclick="openSection('image-to-pdf-sec')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-red-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-5">
-            <div class="p-3 bg-red-50 text-red-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">Images to PDF</h2>
-        </div>
-        <div onclick="openSection('text-to-speech-sec')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-teal-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-6">
-            <div class="p-3 bg-teal-50 text-teal-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">Text to Speech</h2>
-        </div>
-        <div onclick="openSection('qr-generator-sec')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-orange-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-7">
-            <div class="p-3 bg-orange-50 text-orange-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">QR Generator</h2>
-        </div>
-        <div onclick="openSection('age-calculator-sec')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-rose-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-8">
-            <div class="p-3 bg-rose-50 text-rose-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">Age Calculator</h2>
-        </div>
-        <div onclick="openSection('resume-builder-sec')" class="home-card p-5 rounded-2xl shadow-sm border hover:border-sky-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-9">
-            <div class="p-3 bg-sky-50 text-sky-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide uppercase">Resume Builder</h2>
-        </div>
-        <div onclick="openSection('grammar-checker-sec')" class="home-card p-5 rounded-2xl shadow-sm border border-dashed border-blue-400 hover:border-blue-500 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center text-center group" id="card-10">
-            <div class="p-3 bg-blue-100 text-blue-600 rounded-xl mb-3"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
-            <h2 class="text-xs font-extrabold tracking-wide text-blue-600 uppercase">Grammar Checker</h2>
-        </div>
-    </div>
+  <header class="topbar">
+    <button class="brand" onclick="goHome()" aria-label="Go to home">
+      <span class="brand-mark">Student Utility Hub</span>
+      <span class="brand-tag">10 tools</span>
+    </button>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleDarkMode()">
+      <span id="dark-icon">◐</span><span id="dark-text">Dark</span>
+    </button>
+  </header>
 
-    <div id="inner-pages-container" class="max-w-3xl mx-auto mt-6 hidden">
-        <button onclick="goHome()" class="mb-6 px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition" id="back-btn">← Back to Home</button>
+  <!-- ============ HOME ============ -->
+  <main id="home-page">
+    <p class="board-label">Select a tool</p>
+    <div class="board" id="board"></div>
+  </main>
 
-        <div id="photo-compressor" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-4">🖼️ Photo Compressor & Resizer</h2>
-            <div class="space-y-4">
-                <input type="file" id="photo-input" accept="image/*" class="field w-full p-2 border rounded-lg text-sm" onchange="previewOriginalImage()">
-                <p id="original-size" class="text-xs text-emerald-600 font-medium"></p>
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="target-kb" placeholder="Target Size (KB)" class="field w-full p-2 border rounded-lg text-sm">
-                    <select id="photo-format" class="field w-full p-2 border rounded-lg text-sm">
-                        <option value="image/jpeg">JPG / JPEG</option>
-                        <option value="image/png">PNG</option>
-                    </select>
-                </div>
-                <button onclick="processAdvancedPhoto()" id="compress-btn" class="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl shadow disabled:opacity-60">Compress & Download</button>
-            </div>
+  <!-- ============ TOOL PAGES ============ -->
+  <main id="pages" style="display:none;">
+    <button class="back-btn" onclick="goHome()">&larr; Back to all tools</button>
+
+    <!-- 1. Photo Compressor -->
+    <section class="tool-page" id="photo-compressor" data-index="01">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Photo Compressor</h1>
+          <p class="tool-desc">Shrink an image to a target file size or just re-export it as JPG/PNG.</p>
         </div>
-
-        <div id="doc-pdf-maker" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-2">📄 Document & PDF Creator</h2>
-            <textarea id="doc-text" rows="6" placeholder="Paste assignment text or raw lists here..." class="field w-full p-3 border rounded-xl text-sm mb-2" oninput="updateLiveCounts()"></textarea>
-
-            <div class="flex gap-4 text-xs font-semibold text-slate-500 mb-4 p-2 rounded-lg bg-slate-50" id="counter-box">
-                <div>Words: <span id="live-word-count" class="text-blue-600 font-bold">0</span></div>
-                <div>Letters/Characters: <span id="live-char-count" class="text-indigo-600 font-bold">0</span></div>
-            </div>
-
-            <div class="flex justify-between items-center mb-4">
-                <button onclick="beautifyTable()" id="ai-btn" class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg text-xs shadow">🪄 Format as Table Layout</button>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="downloadWord()" class="py-3 bg-indigo-600 text-white font-bold rounded-xl text-sm shadow">Download Word (.doc)</button>
-                <button onclick="downloadPdf()" class="py-3 bg-red-600 text-white font-bold rounded-xl text-sm shadow">Download PDF (.pdf)</button>
-            </div>
+      </div>
+      <div class="panel stack">
+        <div>
+          <label class="field-label">Image file</label>
+          <input type="file" id="photo-input" accept="image/*" class="field" onchange="previewOriginalImage()">
         </div>
-
-        <div id="text-case-converter" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-4">🔤 Text Case Converter</h2>
-            <textarea id="case-converter-text" rows="5" class="field w-full p-3 border rounded-lg text-sm mb-4" placeholder="Type text here..."></textarea>
-            <div class="grid grid-cols-3 gap-2">
-                <button class="py-2 btn-gray text-xs font-bold rounded-lg" onclick="convertCase('upper')">UPPERCASE</button>
-                <button class="py-2 btn-gray text-xs font-bold rounded-lg" onclick="convertCase('lower')">lowercase</button>
-                <button class="py-2 btn-gray text-xs font-bold rounded-lg" onclick="convertCase('sentence')">Sentence</button>
-            </div>
+        <p class="readout" id="original-size" style="display:none;"></p>
+        <div class="row2">
+          <div>
+            <label class="field-label">Target size (KB)</label>
+            <input type="number" id="target-kb" placeholder="e.g. 200" class="field">
+          </div>
+          <div>
+            <label class="field-label">Output format</label>
+            <select id="photo-format" class="field">
+              <option value="image/jpeg">JPG / JPEG</option>
+              <option value="image/png">PNG</option>
+            </select>
+          </div>
         </div>
+        <button class="btn btn-signal" id="compress-btn" onclick="processAdvancedPhoto()">Compress &amp; download</button>
+        <p class="hint">PNG ignores the target size field — PNG compression is lossless, so size depends only on image content. Use JPG if you need a precise size.</p>
+      </div>
+    </section>
 
-        <div id="cgpa-calculator" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-4">🎓 CGPA to Percentage Calculator</h2>
-            <div class="flex gap-2">
-                <input type="number" id="cgpa-input" step="0.01" placeholder="Enter CGPA score" class="field flex-1 p-3 border rounded-lg text-sm">
-                <button onclick="calculatePercentage()" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg text-sm shadow">Calculate</button>
-            </div>
-            <p id="cgpa-result" class="text-lg font-bold text-purple-700 mt-4"></p>
+    <!-- 2. Doc & PDF Maker -->
+    <section class="tool-page" id="doc-pdf-maker" data-index="02">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Doc &amp; PDF Maker</h1>
+          <p class="tool-desc">Turn plain notes into a downloadable Word doc or PDF — optionally as a structured table.</p>
         </div>
-
-        <div id="image-to-pdf-sec" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-4">📸 Convert Images to PDF</h2>
-            <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="field w-full p-2 border rounded-lg text-sm mb-4">
-            <button onclick="convertImagesToPdf()" id="img-to-pdf-btn" class="w-full py-3 bg-red-600 text-white font-bold rounded-xl shadow disabled:opacity-60">Convert & Download PDF</button>
+      </div>
+      <div class="panel stack">
+        <div>
+          <label class="field-label">Your text</label>
+          <textarea id="doc-text" rows="7" class="field" placeholder="Paste notes, a list, or assignment text here..." oninput="updateLiveCounts()"></textarea>
         </div>
-
-        <div id="text-to-speech-sec" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-2">🔊 Text to Speech</h2>
-            <textarea id="tts-text" rows="4" placeholder="Type text here for audio readout..." class="field w-full p-3 border rounded-lg text-sm mb-4"></textarea>
-            <div class="mb-4">
-                <label class="block text-xs font-semibold mb-1">Choose Voice:</label>
-                <select id="tts-voice-select" class="field w-full p-2 border rounded-lg text-xs"></select>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="speakText()" class="py-3 bg-teal-600 text-white font-bold rounded-xl text-sm shadow">🔊 Play Voice</button>
-                <button onclick="downloadTtsAudioFile()" class="py-3 bg-slate-800 text-white font-bold rounded-xl text-sm shadow">💾 Download Audio (.wav)</button>
-            </div>
-            <p class="text-xs text-slate-400 mt-3 leading-relaxed">Note: browsers don't allow capturing system speech synthesis directly to a file, so the downloaded .wav is a placeholder silent track alongside the live playback. For a real narrated audio file, a server-side text-to-speech service is needed.</p>
+        <div class="badge-count">
+          <span>Words <b id="live-word-count">0</b></span>
+          <span>Characters <b id="live-char-count">0</b></span>
         </div>
-
-        <div id="qr-generator-sec" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-4">🏁 QR Code Generator</h2>
-            <input type="text" id="qr-text" placeholder="Enter link (e.g. https://example.com)" class="field w-full p-3 border rounded-lg text-sm mb-4">
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="generateQrCode()" class="py-3 bg-orange-600 text-white font-bold rounded-xl text-sm shadow">Generate QR</button>
-                <button onclick="downloadQrCode()" id="qr-dl-btn" class="py-3 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow hidden">💾 Download PNG</button>
-            </div>
-            <div id="qr-output" class="flex justify-center bg-slate-50 p-4 rounded-xl border border-dashed"></div>
+        <button class="btn btn-ghost" id="ai-btn" onclick="beautifyTable()">Format as table layout</button>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="downloadWord()">Download .doc</button>
+          <button class="btn btn-signal" onclick="downloadPdf()">Download .pdf</button>
         </div>
+      </div>
+    </section>
 
-        <div id="age-calculator-sec" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-4">🗓️ Age Calculator</h2>
-            <input type="date" id="dob-input" class="field w-full p-3 border rounded-lg text-sm mb-4">
-            <button onclick="calculateAge()" class="w-full py-3 bg-rose-600 text-white font-bold rounded-xl shadow">Calculate Age</button>
-            <p id="age-result" class="text-lg font-bold text-rose-600 mt-4 text-center"></p>
+    <!-- 3. Case Converter -->
+    <section class="tool-page" id="text-case-converter" data-index="03">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10M7 12h10M4 17h13"/></svg></div>
+        <div>
+          <h1 class="tool-title">Case Converter</h1>
+          <p class="tool-desc">Rewrite text as UPPERCASE, lowercase, or Sentence case.</p>
         </div>
-
-        <div id="resume-builder-sec" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold mb-2">💼 Resume Builder</h2>
-            <div class="grid grid-cols-3 gap-2 mb-4">
-                <button onclick="setResumeTemplate('professional')" id="tpl-prof" class="py-2 text-xs font-bold border rounded-lg bg-blue-600 text-white">Professional</button>
-                <button onclick="setResumeTemplate('creative')" id="tpl-creat" class="py-2 text-xs font-bold border rounded-lg btn-gray">Creative</button>
-                <button onclick="setResumeTemplate('minimal')" id="tpl-min" class="py-2 text-xs font-bold border rounded-lg btn-gray">Minimalist</button>
-            </div>
-            <div class="space-y-3 mb-4">
-                <input type="text" id="res-name" placeholder="Full Name" class="field w-full p-2 border rounded-lg text-sm">
-                <input type="text" id="res-email" placeholder="Email Address" class="field w-full p-2 border rounded-lg text-sm">
-                <input type="text" id="res-education" placeholder="Education Details" class="field w-full p-2 border rounded-lg text-sm">
-                <textarea id="res-skills" rows="2" placeholder="Skills (comma separated)" class="field w-full p-2 border rounded-lg text-sm"></textarea>
-            </div>
-            <button onclick="downloadResume()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow">Generate Resume PDF</button>
+      </div>
+      <div class="panel stack">
+        <textarea id="case-converter-text" rows="6" class="field" placeholder="Type or paste text here..."></textarea>
+        <div class="chip-row">
+          <button class="chip" onclick="convertCase('upper')">UPPERCASE</button>
+          <button class="chip" onclick="convertCase('lower')">lowercase</button>
+          <button class="chip" onclick="convertCase('sentence')">Sentence case</button>
         </div>
+      </div>
+    </section>
 
-        <div id="grammar-checker-sec" class="surface p-6 rounded-2xl shadow border hidden inner-card">
-            <h2 class="text-xl font-bold text-blue-600 mb-2">✨ Grammar Checker</h2>
-            <textarea id="grammar-check-text" rows="6" placeholder="Paste essay here to check for common issues..." class="field w-full p-3 border rounded-xl text-sm mb-4"></textarea>
-            <button onclick="auditContent()" id="audit-btn" class="w-full py-3 bg-blue-600 text-    
+    <!-- 4. CGPA Calculator -->
+    <section class="tool-page" id="cgpa-calculator" data-index="04">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg></div>
+        <div>
+          <h1 class="tool-title">CGPA Calculator</h1>
+          <p class="tool-desc">Convert a CGPA (10-point scale) to an approximate percentage.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <div class="row2">
+          <input type="number" id="cgpa-input" step="0.01" min="0" max="10" placeholder="e.g. 8.4" class="field">
+          <button class="btn btn-signal" onclick="calculatePercentage()">Calculate</button>
+        </div>
+        <p class="readout" id="cgpa-result" style="display:none;"></p>
+        <p class="hint">Uses the common ×9.5 formula (CBSE/UGC convention). Some institutions use a different multiplier — check your institution's official conversion if this is for an official document.</p>
+      </div>
+    </section>
+
+    <!-- 5. Images to PDF -->
+    <section class="tool-page" id="image-to-pdf-sec" data-index="05">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg></div>
+        <div>
+          <h1 class="tool-title">Images to PDF</h1>
+          <p class="tool-desc">Combine one or more photos into a single PDF, in the order you select them.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="field">
+        <button class="btn btn-signal" id="img-to-pdf-btn" onclick="convertImagesToPdf()">Convert &amp; download PDF</button>
+        <p class="readout" id="img-to-pdf-status" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- 6. Text to Speech -->
+    <section class="tool-page" id="text-to-speech-sec" data-index="06">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Text to Speech</h1>
+          <p class="tool-desc">Hear any text read aloud using your browser's built-in voices.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <textarea id="tts-text" rows="5" class="field" placeholder="Type text to read aloud..."></textarea>
+        <div>
+          <label class="field-label">Voice</label>
+          <select id="tts-voice-select" class="field"></select>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-signal" onclick="speakText()">Play voice</button>
+          <button class="btn btn-ghost" onclick="downloadTtsAudioFile()">About audio download</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. QR Generator -->
+    <section class="tool-page" id="qr-generator-sec" data-index="07">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg></div>
+        <div>
+          <h1 class="tool-title">QR Code Generator</h1>
+          <p class="tool-desc">Turn a link or any text into a scannable QR code.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <input type="text" id="qr-text" placeholder="Enter a link or text" class="field">
+        <div class="btn-row">
+          <button class="btn btn-signal" onclick="generateQrCode()">Generate</button>
+          <button class="btn btn-ghost" id="qr-dl-btn" onclick="downloadQrCode()" style="display:none;">Download PNG</button>
+        </div>
+        <div class="qr-stage" id="qr-output"></div>
+      </div>
+    </section>
+
+    <!-- 8. Age Calculator -->
+    <section class="tool-page" id="age-calculator-sec" data-index="08">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Age Calculator</h1>
+          <p class="tool-desc">Find exact age in years, months, and days from a date of birth.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <input type="date" id="dob-input" class="field">
+        <button class="btn btn-signal" onclick="calculateAge()">Calculate age</button>
+        <p class="readout" id="age-result" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- 9. Resume Builder -->
+    <section class="tool-page" id="resume-builder-sec" data-index="09">
+      <div class="tool-header">
+        <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
