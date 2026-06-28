@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Utility Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{
+    /* Premium toolbench palette — warm paper + deep ink + signal orange,
+       plus a second accent (teal) and tertiary (violet) so tool cards and
+       buttons can carry real color instead of one accent doing all the work. */
+    --paper:#FBF8F2;
+    --paper-deep:#F1ECE0;
+    --ink:#100E1A;
+    --panel:#1B1830;
+    --panel-light:#FFFFFF;
+    --muted:#9892AE;
+    --muted-light:#6E6884;
+    --line:#E7E0D2;
+    --line-dark:#332E4D;
+    --signal:#FF6B35;
+    --signal-dim:#FFE4D6;
+    --teal:#0FA3A3;
+    --teal-dim:#D7F2F0;
+    --violet:#7C5CFC;
+    --violet-dim:#E9E2FF;
+    --gold:#E0A030;
+    --gold-dim:#FBEBCC;
+    --ok:#1FA862;
+    --err:#E14B4B;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(255,107,53,.07), transparent 38%),
+      radial-gradient(circle at 92% 18%, rgba(124,92,252,.06), transparent 40%),
+      var(--paper);
+    color:var(--ink);
+    transition:background .25s ease, color .25s ease;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  html.dark body{
+    background:
+      radial-gradient(circle at 8% 0%, rgba(255,107,53,.10), transparent 38%),
+      radial-gradient(circle at 92% 18%, rgba(124,92,252,.10), transparent 40%),
+      var(--ink);
+    color:#F3F1FA;
+  }
+
+  .mono{ font-family:'JetBrains Mono',monospace; }
+  .display{ font-family:'Space Grotesk',sans-serif; }
+
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:2px solid var(--signal);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+
+  .wrap{ max-width:960px; margin:0 auto; padding:24px 18px 90px; }
+
+  /* ---------- Header ---------- */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px; margin-bottom:26px;
+    background:var(--panel-light); border:1px solid var(--line); border-radius:18px;
+    box-shadow:0 1px 0 rgba(16,14,26,.02);
+  }
+  html.dark .topbar{ background:var(--panel); border-color:var(--line-dark); }
+  .brand{
+    display:flex; align-items:center; gap:10px; cursor:pointer;
+    background:none; border:none; padding:0;
+  }
+  .brand-glyph{
+    width:30px; height:30px; border-radius:9px; flex-shrink:0;
+    background:linear-gradient(135deg, var(--signal), var(--violet));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14px;
+  }
+  .brand-mark{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px;
+    letter-spacing:-0.01em; color:var(--ink);
+  }
+  html.dark .brand-mark{ color:#F3F1FA; }
+  .brand-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted-light);
+    text-transform:uppercase; letter-spacing:.1em;
+    border:1px solid var(--line); border-radius:100px; padding:3px 9px;
+    margin-left:6px;
+  }
+  html.dark .brand-tag{ border-color:var(--line-dark); color:var(--muted); }
+
+  .theme-toggle{
+    display:flex; align-items:center; gap:8px;
+    background:var(--ink); color:#fff; border:none;
+    border-radius:100px; padding:9px 16px;
+    font-size:12px; font-weight:600; letter-spacing:.02em;
+  }
+  html.dark .theme-toggle{ background:var(--signal); color:#1A0E07; }
+
+  /* ---------- Toolboard (home grid) ---------- */
+  .board-label{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted-light); margin-bottom:14px; padding-left:2px;
+  }
+  html.dark .board-label{ color:var(--muted); }
+  .board{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
+  }
+  @media (min-width:640px){ .board{ grid-template-columns:repeat(4,1fr); } }
+
+  .tool-card{
+    position:relative;
+    background:var(--panel-light);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 14px 16px;
+    text-align:left;
+    display:flex; flex-direction:column; gap:10px;
+    transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  html.dark .tool-card{ background:var(--panel); border-color:var(--line-dark); color:#F3F1FA; }
+  .tool-card:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,14,26,.08); }
+  .tool-card[data-hue="orange"]:hover{ border-color:var(--signal); }
+  .tool-card[data-hue="teal"]:hover{ border-color:var(--teal); }
+  .tool-card[data-hue="violet"]:hover{ border-color:var(--violet); }
+  .tool-card[data-hue="gold"]:hover{ border-color:var(--gold); }
+
+  .tool-index{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); }
+  .tool-icon{
+    width:36px; height:36px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .tool-icon svg{ width:18px; height:18px; }
+  [data-hue="orange"] .tool-icon{ color:var(--signal); background:var(--signal-dim); }
+  [data-hue="teal"] .tool-icon{ color:var(--teal); background:var(--teal-dim); }
+  [data-hue="violet"] .tool-icon{ color:var(--violet); background:var(--violet-dim); }
+  [data-hue="gold"] .tool-icon{ color:var(--gold); background:var(--gold-dim); }
+  html.dark [data-hue="orange"] .tool-icon{ background:rgba(255,107,53,.16); }
+  html.dark [data-hue="teal"] .tool-icon{ background:rgba(15,163,163,.16); }
+  html.dark [data-hue="violet"] .tool-icon{ background:rgba(124,92,252,.18); }
+  html.dark [data-hue="gold"] .tool-icon{ background:rgba(224,160,48,.16); }
+
+  .tool-name{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px; line-height:1.25; }
+
+  /* ---------- Inner tool pages ---------- */
+  .tool-page{ display:none; }
+  .tool-page.active{ display:block; }
+
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:none; color:var(--muted-light);
+    font-size:12px; font-weight:600; padding:0; margin-bottom:18px;
+  }
+  html.dark .back-btn{ color:var(--muted); }
+  .back-btn:hover{ color:var(--signal); }
+
+  .tool-header{
+    display:flex; align-items:flex-start; gap:14px;
+    margin-bottom:22px; padding-bottom:18px; border-bottom:1px solid var(--line);
+  }
+  html.dark .tool-header{ border-color:var(--line-dark); }
+  .tool-header .tool-icon{ width:44px; height:44px; flex-shrink:0; }
+  .tool-header .tool-icon svg{ width:22px; height:22px; }
+  .tool-title{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; margin:0 0 4px; }
+  .tool-desc{ font-size:13px; color:var(--muted-light); margin:0; line-height:1.5; }
+  html.dark .tool-desc{ color:var(--muted); }
+
+  .panel{
+    background:var(--panel-light); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px;
+  }
+  html.dark .panel{ background:var(--panel); border-color:var(--line-dark); }
+
+  label.field-label{ display:block; font-size:11px; font-weight:600; letter-spacing:.03em; color:var(--muted-light); margin-bottom:6px; text-transform:uppercase; }
+  html.dark label.field-label{ color:var(--muted); }
+
+  .field{
+    width:100%; padding:12px 13px; border:1px solid var(--line); border-radius:10px;
+    background:var(--paper); color:var(--ink); font-size:14px; font-family:inherit;
+  }
+  html.dark .field{ background:var(--ink); border-color:var(--line-dark); color:#F3F1FA; }
+  .field::placeholder{ color:var(--muted); }
+  .field:focus{ border-color:var(--signal); }
+
+  textarea.field{ resize:vertical; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:13px 18px; border-radius:11px; border:none;
+    font-weight:600; font-size:14px; letter-spacing:.01em;
+    transition:opacity .15s ease, transform .1s ease, box-shadow .15s ease;
+  }
+  .btn:active{ transform:scale(.98); }
+  .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+  .btn-primary{ background:var(--ink); color:#fff; }
+  html.dark .btn-primary{ background:#fff; color:var(--ink); }
+  .btn-signal{ background:var(--signal); color:#fff; box-shadow:0 4px 14px rgba(255,107,53,.28); }
+  .btn-teal{ background:var(--teal); color:#fff; box-shadow:0 4px 14px rgba(15,163,163,.25); }
+  .btn-violet{ background:var(--violet); color:#fff; box-shadow:0 4px 14px rgba(124,92,252,.28); }
+  .btn-ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+  html.dark .btn-ghost{ border-color:var(--line-dark); color:#F3F1FA; }
+  .btn-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+  .readout{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted-light);
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; margin-top:10px;
+  }
+  html.dark .readout{ background:var(--ink); border-color:var(--line-dark); color:var(--muted); }
+  .readout .ok{ color:var(--ok); font-weight:600; }
+  .readout .num{ color:var(--signal); font-weight:600; }
+
+  .hint{ font-size:12px; color:var(--muted-light); line-height:1.6; margin-top:12px; }
+  html.dark .hint{ color:var(--muted); }
+  .check-row{ display:flex; align-items:center; gap:8px; font-size:13px; font-weight:500; cursor:pointer; user-select:none; }
+  .check-row input[type="checkbox"]{ width:16px; height:16px; accent-color:var(--signal); cursor:pointer; }
+
+  .stack{ display:flex; flex-direction:column; gap:12px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+  .chip-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .chip{
+    padding:10px 8px; border-radius:10px; border:1px solid var(--line);
+    background:var(--paper); font-size:12px; font-weight:600; text-align:center; color:var(--ink);
+  }
+  html.dark .chip{ background:var(--ink); border-color:var(--line-dark); color:#F3F1FA; }
+  .chip.is-active{ background:var(--violet); color:#fff; border-color:var(--violet); }
+
+  .tpl-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  @media (min-width:520px){ .tpl-grid{ grid-template-columns:repeat(5,1fr); } }
+  .tpl-card{
+    border:2px solid var(--line); border-radius:10px; padding:8px 6px 9px; text-align:center;
+    background:var(--paper); cursor:pointer;
+  }
+  html.dark .tpl-card{ background:var(--ink); border-color:var(--line-dark); }
+  .tpl-card.is-active{ border-color:var(--violet); box-shadow:0 0 0 3px var(--violet-dim); }
+  html.dark .tpl-card.is-active{ box-shadow:0 0 0 3px rgba(124,92,252,.25); }
+  .tpl-swatch{ width:100%; height:38px; border-radius:6px; margin-bottom:6px; }
+  .tpl-card span{ font-size:10.5px; font-weight:600; }
+
+  .qr-stage{
+    display:flex; justify-content:center; align-items:center; min-height:190px;
+    background:var(--paper); border:1px dashed var(--line); border-radius:10px; margin-top:14px;
+    padding:14px;
+  }
+  html.dark .qr-stage{ background:var(--ink); border-color:var(--line-dark); }
+
+  .audit-box{
+    margin-top:14px; padding:16px; border-radius:10px; border:1px dashed var(--line);
+    background:var(--paper); font-size:13px; line-height:1.7; max-height:320px; overflow-y:auto;
+  }
+  html.dark .audit-box{ background:var(--ink); border-color:var(--line-dark); }
+  .audit-box.is-hidden{ display:none; }
+  .audit-box mark{ background:var(--gold-dim); color:var(--ink); padding:0 2px; border-radius:3px; }
+  html.dark .audit-box mark{ background:rgba(224,160,48,.3); color:#fff; }
+
+  .badge-count{
+    display:inline-flex; gap:14px; font-family:'JetBrains Mono',monospace; font-size:12px;
+    color:var(--muted-light); margin-top:10px;
+  }
+  html.dark .badge-count{ color:var(--muted); }
+  .badge-count b{ color:var(--signal); }
+
+  .ai-badge{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--violet); background:var(--violet-dim); border-radius:100px; padding:3px 9px;
+  }
+  html.dark .ai-badge{ background:rgba(124,92,252,.18); }
+
+  .spinner{
+    width:14px; height:14px; border-radius:50%;
+    border:2px solid rgba(255,255,255,.4); border-top-color:#fff;
+    animation:spin .7s linear infinite; display:inline-block;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+  html.dark ::-webkit-scrollbar-thumb{ background:var(--line-dark); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="topbar">
+    <button class="brand" onclick="goHome()" aria-label="Go to home">
+      <span class="brand-glyph">S</span>
+      <span class="brand-mark">Student Utility Hub</span>
+      <span class="brand-tag">10 tools</span>
+    </button>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleDarkMode()">
+      <span id="dark-icon">◐</span><span id="dark-text">Dark</span>
+    </button>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <main id="home-page">
+    <p class="board-label">Select a tool</p>
+    <div class="board" id="board">
+      <button class="tool-card" data-hue="orange" onclick="openSection('photo-compressor')" aria-label="Open Photo Compressor">
+        <span class="tool-index mono">01</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>
+        <span class="tool-name">Photo Compressor</span>
+      </button>
+      <button class="tool-card" data-hue="violet" onclick="openSection('doc-pdf-maker')" aria-label="Open Doc & PDF Maker">
+        <span class="tool-index mono">02</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></span>
+        <span class="tool-name">Doc & PDF Maker</span>
+      </button>
+      <button class="tool-card" data-hue="gold" onclick="openSection('text-case-converter')" aria-label="Open Case Converter">
+        <span class="tool-index mono">03</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10M7 12h10M4 17h13"/></svg></span>
+        <span class="tool-name">Case Converter</span>
+      </button>
+      <button class="tool-card" data-hue="teal" onclick="openSection('cgpa-calculator')" aria-label="Open CGPA Calculator">
+        <span class="tool-index mono">04</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg></span>
+        <span class="tool-name">CGPA Calculator</span>
+      </button>
+      <button class="tool-card" data-hue="orange" onclick="openSection('image-to-pdf-sec')" aria-label="Open Images to PDF">
+        <span class="tool-index mono">05</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg></span>
+        <span class="tool-name">Images to PDF</span>
+      </button>
+      <button class="tool-card" data-hue="teal" onclick="openSection('text-to-speech-sec')" aria-label="Open Text to Speech">
+        <span class="tool-index mono">06</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg></span>
+        <span class="tool-name">Text to Speech</span>
+      </button>
+      <button class="tool-card" data-hue="gold" onclick="openSection('qr-generator-sec')" aria-label="Open QR Generator">
+        <span class="tool-index mono">07</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg></span>
+        <span class="tool-name">QR Generator</span>
+      </button>
+      <button class="tool-card" data-hue="violet" onclick="openSection('age-calculator-sec')" aria-label="Open Age Calculator">
+        <span class="tool-index mono">08</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>
+        <span class="tool-name">Age Calculator</span>
+      </button>
+      <button class="tool-card" data-hue="orange" onclick="openSection('resume-builder-sec')" aria-label="Open Resume Builder">
+        <span class="tool-index mono">09</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
+        <span class="tool-name">Resume Builder</span>
+      </button>
+      <button class="tool-card" data-hue="violet" onclick="openSection('grammar-checker-sec')" aria-label="Open Grammar Checker">
+        <span class="tool-index mono">10</span>
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+        <span class="tool-name">Grammar Checker</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- ============ TOOL PAGES ============ -->
+  <main id="pages" style="display:none;">
+    <button class="back-btn" onclick="goHome()">&larr; Back to all tools</button>
+
+    <!-- 1. Photo Compressor -->
+    <section class="tool-page" id="photo-compressor">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--signal-dim);color:var(--signal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Photo Compressor</h1>
+          <p class="tool-desc">Shrink an image to a target file size or just re-export it as JPG/PNG.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <div>
+          <label class="field-label">Image file</label>
+          <input type="file" id="photo-input" accept="image/*" class="field" onchange="previewOriginalImage()">
+        </div>
+        <p class="readout" id="original-size" style="display:none;"></p>
+
+        <div>
+          <label class="field-label">Resize to</label>
+          <select id="resize-preset" class="field" onchange="onResizePresetChange()">
+            <option value="original">Keep original size</option>
+            <option value="passport_2x2in">Passport photo — 2×2 in (600×600 px)</option>
+            <option value="passport_35x45mm">Passport photo — 35×45 mm (413×531 px)</option>
+            <option value="stamp_20x25mm">Stamp size — 20×25 mm (236×295 px)</option>
+            <option value="a4_300dpi">A4 page — 300 DPI (2480×3508 px)</option>
+            <option value="custom">Custom pixel size...</option>
+          </select>
+        </div>
+        <div class="row2" id="custom-dim-row" style="display:none;">
+          <div>
+            <label class="field-label">Width (px)</label>
+            <input type="number" id="custom-width" placeholder="e.g. 800" class="field" oninput="onCustomDimInput('width')">
+          </div>
+          <div>
+            <label class="field-label">Height (px)</label>
+            <input type="number" id="custom-height" placeholder="e.g. 600" class="field" oninput="onCustomDimInput('height')">
+          </div>
+        </div>
+        <label class="check-row" id="aspect-lock-row" style="display:none;">
+          <input type="checkbox" id="aspect-lock" checked>
+          <span>Lock aspect ratio</span>
+        </label>
+
+        <div class="row2">
+          <div>
+            <label class="field-label">Target size (KB) <span style="font-weight:400;text-transform:none;">— optional</span></label>
+            <input type="number" id="target-kb" placeholder="e.g. 200" class="field">
+          </div>
+          <div>
+            <label class="field-label">Output format</label>
+            <select id="photo-format" class="field">
+              <option value="image/jpeg">JPG / JPEG</option>
+              <option value="image/png">PNG</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-signal" id="compress-btn" onclick="processAdvancedPhoto()">Compress &amp; download</button>
+        <p class="hint">Pick a preset (like passport or stamp size) or set a custom pixel size, plus an optional target file size in KB. PNG ignores the target-size field since PNG compression is lossless.</p>
+      </div>
+    </section>
+
+    <!-- 2. Doc & PDF Maker -->
+    <section class="tool-page" id="doc-pdf-maker">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--violet-dim);color:var(--violet);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Doc &amp; PDF Maker</h1>
+          <p class="tool-desc">Turn plain notes into a downloadable Word doc or PDF — with optional AI formatting.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <div>
+          <label class="field-label">Your text</label>
+          <textarea id="doc-text" rows="7" class="field" placeholder="Paste notes, a list, assignment text, or anything you want formatted..." oninput="updateLiveCounts()"></textarea>
+        </div>
+        <div class="badge-count">
+          <span>Words <b id="live-word-count">0</b></span>
+          <span>Characters <b id="live-char-count">0</b></span>
+        </div>
+        <button class="btn btn-violet" id="ai-format-btn" onclick="aiFormatDocument()">
+          <span class="ai-badge" style="background:rgba(255,255,255,.2);color:#fff;">AI</span>
+          Smart-format with AI
+        </button>
+        <button class="btn btn-ghost" id="table-btn" onclick="beautifyTable()">Format as table layout (offline)</button>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="downloadWord()">Download .docx</button>
+          <button class="btn btn-signal" onclick="downloadPdf()">Download .pdf</button>
+        </div>
+        <p class="readout" id="doc-status" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- 3. Case Converter -->
+    <section class="tool-page" id="text-case-converter">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--gold-dim);color:var(--gold);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10M7 12h10M4 17h13"/></svg></div>
+        <div>
+          <h1 class="tool-title">Case Converter</h1>
+          <p class="tool-desc">Rewrite text as UPPERCASE, lowercase, or Sentence case.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <textarea id="case-converter-text" rows="6" class="field" placeholder="Type or paste text here..."></textarea>
+        <div class="chip-row">
+          <button class="chip" onclick="convertCase('upper')">UPPERCASE</button>
+          <button class="chip" onclick="convertCase('lower')">lowercase</button>
+          <button class="chip" onclick="convertCase('sentence')">Sentence case</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CGPA Calculator -->
+    <section class="tool-page" id="cgpa-calculator">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--teal-dim);color:var(--teal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg></div>
+        <div>
+          <h1 class="tool-title">CGPA Calculator</h1>
+          <p class="tool-desc">Convert a CGPA (10-point scale) to an approximate percentage.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <div class="row2">
+          <input type="number" id="cgpa-input" step="0.01" min="0" max="10" placeholder="e.g. 8.4" class="field">
+          <button class="btn btn-teal" onclick="calculatePercentage()">Calculate</button>
+        </div>
+        <p class="readout" id="cgpa-result" style="display:none;"></p>
+        <p class="hint">Uses the common ×9.5 formula (CBSE/UGC convention). Some institutions use a different multiplier — check your institution's official conversion if this is for an official document.</p>
+      </div>
+    </section>
+
+    <!-- 5. Images to PDF -->
+    <section class="tool-page" id="image-to-pdf-sec">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--signal-dim);color:var(--signal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg></div>
+        <div>
+          <h1 class="tool-title">Images to PDF</h1>
+          <p class="tool-desc">Combine one or more photos into a single PDF, in the order you select them.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="field">
+        <button class="btn btn-signal" id="img-to-pdf-btn" onclick="convertImagesToPdf()">Convert &amp; download PDF</button>
+        <p class="readout" id="img-to-pdf-status" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- 6. Text to Speech -->
+    <section class="tool-page" id="text-to-speech-sec">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--teal-dim);color:var(--teal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Text to Speech</h1>
+          <p class="tool-desc">Hear any text read aloud using your browser's built-in voices.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <textarea id="tts-text" rows="5" class="field" placeholder="Type text to read aloud..."></textarea>
+        <div>
+          <label class="field-label">Voice</label>
+          <select id="tts-voice-select" class="field"></select>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-teal" onclick="speakText()">Play voice</button>
+          <button class="btn btn-ghost" onclick="downloadTtsAudioFile()">About audio download</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. QR Generator -->
+    <section class="tool-page" id="qr-generator-sec">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--gold-dim);color:var(--gold);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg></div>
+        <div>
+          <h1 class="tool-title">QR Code Generator</h1>
+          <p class="tool-desc">Turn a link or any text into a scannable QR code.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <input type="text" id="qr-text" placeholder="Enter a link or text" class="field">
+        <div class="btn-row">
+          <button class="btn btn-signal" onclick="generateQrCode()">Generate</button>
+          <button class="btn btn-ghost" id="qr-dl-btn" onclick="downloadQrCode()" style="display:none;">Download PNG</button>
+        </div>
+        <div class="qr-stage" id="qr-output"></div>
+      </div>
+    </section>
+
+    <!-- 8. Age Calculator -->
+    <section class="tool-page" id="age-calculator-sec">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--violet-dim);color:var(--violet);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Age Calculator</h1>
+          <p class="tool-desc">Find exact age in years, months, and days from a date of birth.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <input type="date" id="dob-input" class="field">
+        <button class="btn btn-violet" onclick="calculateAge()">Calculate age</button>
+        <p class="readout" id="age-result" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- 9. Resume Builder -->
+    <section class="tool-page" id="resume-builder-sec">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--signal-dim);color:var(--signal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Resume Builder</h1>
+          <p class="tool-desc">Pick from 10 layouts, fill in your details, and download a one-page PDF resume.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <label class="field-label">Choose a template</label>
+        <div class="tpl-grid" id="tpl-grid"></div>
+
+        <input type="text" id="res-name" placeholder="Full name" class="field" style="margin-top:6px;">
+        <div class="row2">
+          <input type="text" id="res-email" placeholder="Email" class="field">
+          <input type="text" id="res-phone" placeholder="Phone (optional)" class="field">
+        </div>
+        <textarea id="res-education" rows="2" placeholder="Education (e.g. B.Sc Computer Science, XYZ University, 2024)" class="field"></textarea>
+        <textarea id="res-experience" rows="3" placeholder="Experience or projects (one per line, optional)" class="field"></textarea>
+        <textarea id="res-skills" rows="2" placeholder="Skills, comma separated" class="field"></textarea>
+        <button class="btn btn-signal" onclick="downloadResume()">Generate resume PDF</button>
+      </div>
+    </section>
+
+    <!-- 10. Grammar Checker -->
+    <section class="tool-page" id="grammar-checker-sec">
+      <div class="tool-header">
+        <div class="tool-icon" style="background:var(--violet-dim);color:var(--violet);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div>
+          <h1 class="tool-title">Grammar Checker</h1>
+          <p class="tool-desc">Scan text for issues, then let AI rewrite it correctly — or run a quick offline check.</p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <textarea id="grammar-check-text" rows="7" class="field" placeholder="Paste your essay or paragraph here..."></textarea>
+        <button class="btn btn-violet" id="ai-fix-btn" onclick="aiFixGrammar()">
+          <span class="ai-badge" style="background:rgba(255,255,255,.2);color:#fff;">AI</span>
+          Find &amp; fix mistakes
+        </button>
+        <button class="btn btn-ghost" onclick="auditContent()">Quick offline check (no fixes)</button>
+        <div class="audit-box is-hidden" id="audit-output"></div>
+        <div class="audit-box is-hidden" id="ai-fix-output"></div>
+        <p class="hint">"Find & fix" sends your text to Gemini AI to rewrite it. "Quick offline check" runs in your browser only — it lists issues but doesn't rewrite anything.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
