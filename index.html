@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="google-site-verification" content="7jyW4kVuYUHKgEKKrXlv0MwheG8mV_ZTo7JkuwY8hgg" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Utility Hub</title>
+<title>Student Utility Hub — Free Online Tools for Students</title>
+<meta name="description" content="Free online student tools: Photo Compressor, Doc & PDF Maker, Images to PDF, Age Calculator, Resume Builder, Grammar Checker, PowerPoint Generator. Works in Malayalam and English.">
+<meta name="keywords" content="student tools, photo compressor, pdf maker, resume builder, grammar checker, powerpoint generator, Malayalam tools, free online tools">
+<meta property="og:title" content="Student Utility Hub — Free Online Tools for Students">
+<meta property="og:description" content="7 free tools for students: compress photos, create PDFs, build resumes, check grammar, generate PowerPoint presentations and more.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Malayalam:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link rel="canonical" id="canonical-link" href="https://project-iszp6.vercel.app/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Student Utility Hub",
+  "description": "Free online tools for students: Photo Compressor, PDF Maker, Resume Builder, Grammar Checker, PowerPoint Generator. Supports Malayalam and English.",
+  "url": "https://project-iszp6.vercel.app/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
 <style>
   :root{
     /* Premium toolbench palette — warm paper + deep ink + signal orange,
@@ -213,6 +232,11 @@
   .btn-violet{ background:var(--violet); color:#fff; box-shadow:0 4px 14px rgba(124,92,252,.28); }
   .btn-ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
   html.dark .btn-ghost{ border-color:var(--line-dark); color:#F3F1FA; }
+  .btn-clear{ background:transparent; border:1px solid #e2ded8; color:#888; font-size:12px; padding:5px 12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
+  .btn-clear:hover{ border-color:#E14B4B; color:#E14B4B; }
+  html.dark .btn-clear{ border-color:#3a3650; color:#7a7590; }
+  html.dark .btn-clear:hover{ border-color:#E14B4B; color:#E14B4B; }
+  .tool-clear-row{ display:flex; justify-content:flex-end; margin-bottom:4px; }
   .btn-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
   .readout{
@@ -358,208 +382,4 @@
     <!-- 1. Photo Compressor -->
     <section class="tool-page" id="photo-compressor">
       <div class="tool-header">
-        <div class="tool-icon" style="background:var(--signal-dim);color:var(--signal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
-        <div>
-          <h1 class="tool-title">Photo Compressor</h1>
-          <p class="tool-desc">Shrink an image to a target file size or just re-export it as JPG/PNG.</p>
-        </div>
-      </div>
-      <div class="panel stack">
-        <div>
-          <label class="field-label">Image file</label>
-          <input type="file" id="photo-input" accept="image/*" class="field" onchange="previewOriginalImage()">
-        </div>
-        <p class="readout" id="original-size" style="display:none;"></p>
-
-        <div>
-          <label class="field-label">Resize to</label>
-          <select id="resize-preset" class="field" onchange="onResizePresetChange()">
-            <option value="original">Keep original size</option>
-            <option value="passport_2x2in">Passport photo — 2×2 in (600×600 px)</option>
-            <option value="passport_35x45mm">Passport photo — 35×45 mm (413×531 px)</option>
-            <option value="stamp_20x25mm">Stamp size — 20×25 mm (236×295 px)</option>
-            <option value="a4_300dpi">A4 page — 300 DPI (2480×3508 px)</option>
-            <option value="custom">Custom pixel size...</option>
-          </select>
-        </div>
-        <div class="row2" id="custom-dim-row" style="display:none;">
-          <div>
-            <label class="field-label">Width (px)</label>
-            <input type="number" id="custom-width" placeholder="e.g. 800" class="field" oninput="onCustomDimInput('width')">
-          </div>
-          <div>
-            <label class="field-label">Height (px)</label>
-            <input type="number" id="custom-height" placeholder="e.g. 600" class="field" oninput="onCustomDimInput('height')">
-          </div>
-        </div>
-        <label class="check-row" id="aspect-lock-row" style="display:none;">
-          <input type="checkbox" id="aspect-lock" checked>
-          <span>Lock aspect ratio</span>
-        </label>
-
-        <div class="row2">
-          <div>
-            <label class="field-label">Target size (KB) <span style="font-weight:400;text-transform:none;">— optional</span></label>
-            <input type="number" id="target-kb" placeholder="e.g. 200" class="field">
-          </div>
-          <div>
-            <label class="field-label">Output format</label>
-            <select id="photo-format" class="field">
-              <option value="image/jpeg">JPG / JPEG</option>
-              <option value="image/png">PNG</option>
-            </select>
-          </div>
-        </div>
-        <button class="btn btn-signal" id="compress-btn" onclick="processAdvancedPhoto()">Compress &amp; download</button>
-        <p class="hint">Pick a preset (like passport or stamp size) or set a custom pixel size, plus an optional target file size in KB. PNG ignores the target-size field since PNG compression is lossless.</p>
-      </div>
-    </section>
-
-    <!-- 2. Doc & PDF Maker -->
-    <section class="tool-page" id="doc-pdf-maker">
-      <div class="tool-header">
-        <div class="tool-icon" style="background:var(--violet-dim);color:var(--violet);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-        <div>
-          <h1 class="tool-title">Doc &amp; PDF Maker</h1>
-          <p class="tool-desc">Turn plain notes into a downloadable Word doc or PDF — with optional AI formatting.</p>
-        </div>
-      </div>
-      <div class="panel stack">
-        <div>
-          <label class="field-label">Your text</label>
-          <textarea id="doc-text" rows="7" class="field" placeholder="Paste notes, a list, assignment text, or anything you want formatted..." oninput="updateLiveCounts()"></textarea>
-        </div>
-        <div class="badge-count">
-          <span>Words <b id="live-word-count">0</b></span>
-          <span>Characters <b id="live-char-count">0</b></span>
-        </div>
-        <button class="btn btn-violet" id="ai-format-btn" onclick="aiFormatDocument()">
-          <span class="ai-badge" style="background:rgba(255,255,255,.2);color:#fff;">AI</span>
-          Smart-format with AI
-        </button>
-        <button class="btn btn-ghost" id="table-btn" onclick="beautifyTable()">Format as table layout (offline)</button>
-        <div class="btn-row">
-          <button class="btn btn-primary" onclick="downloadWord()">Download .docx</button>
-          <button class="btn btn-signal" onclick="downloadPdf()">Download .pdf</button>
-        </div>
-        <p class="readout" id="doc-status" style="display:none;"></p>
-      </div>
-    </section>
-
-    <!-- 3. Images to PDF -->
-    <section class="tool-page" id="image-to-pdf-sec">
-      <div class="tool-header">
-        <div class="tool-icon" style="background:var(--signal-dim);color:var(--signal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg></div>
-        <div>
-          <h1 class="tool-title">Images to PDF</h1>
-          <p class="tool-desc">Combine one or more photos into a single PDF, in the order you select them.</p>
-        </div>
-      </div>
-      <div class="panel stack">
-        <input type="file" id="img-to-pdf-input" accept="image/*" multiple class="field">
-        <button class="btn btn-signal" id="img-to-pdf-btn" onclick="convertImagesToPdf()">Convert &amp; download PDF</button>
-        <p class="readout" id="img-to-pdf-status" style="display:none;"></p>
-      </div>
-    </section>
-
-    <!-- 4. Age Calculator -->
-    <section class="tool-page" id="age-calculator-sec">
-      <div class="tool-header">
-        <div class="tool-icon" style="background:var(--violet-dim);color:var(--violet);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
-        <div>
-          <h1 class="tool-title">Age Calculator</h1>
-          <p class="tool-desc">Find exact age in years, months, and days from a date of birth.</p>
-        </div>
-      </div>
-      <div class="panel stack">
-        <input type="date" id="dob-input" class="field">
-        <button class="btn btn-violet" onclick="calculateAge()">Calculate age</button>
-        <p class="readout" id="age-result" style="display:none;"></p>
-      </div>
-    </section>
-
-    <!-- 9. Resume Builder -->
-    <section class="tool-page" id="resume-builder-sec">
-      <div class="tool-header">
-        <div class="tool-icon" style="background:var(--signal-dim);color:var(--signal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
-        <div>
-          <h1 class="tool-title">Resume Builder</h1>
-          <p class="tool-desc">Pick from 10 layouts, fill in your details, and download a one-page PDF resume.</p>
-        </div>
-      </div>
-      <div class="panel stack">
-        <label class="field-label">Choose a template</label>
-        <div class="tpl-grid" id="tpl-grid"></div>
-
-        <input type="text" id="res-name" placeholder="Full name" class="field" style="margin-top:6px;">
-        <div class="row2">
-          <input type="text" id="res-email" placeholder="Email" class="field">
-          <input type="text" id="res-phone" placeholder="Phone (optional)" class="field">
-        </div>
-        <textarea id="res-education" rows="2" placeholder="Education (e.g. B.Sc Computer Science, XYZ University, 2024)" class="field"></textarea>
-        <textarea id="res-experience" rows="3" placeholder="Experience or projects (one per line, optional)" class="field"></textarea>
-        <textarea id="res-skills" rows="2" placeholder="Skills, comma separated" class="field"></textarea>
-        <button class="btn btn-signal" onclick="downloadResume()">Generate resume PDF</button>
-      </div>
-    </section>
-
-    <!-- 8. Grammar Checker -->
-    <section class="tool-page" id="grammar-checker-sec">
-      <div class="tool-header">
-        <div class="tool-icon" style="background:var(--violet-dim);color:var(--violet);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
-        <div>
-          <h1 class="tool-title">Grammar Checker</h1>
-          <p class="tool-desc">Scan text for issues, then let AI rewrite it correctly — or run a quick offline check.</p>
-        </div>
-      </div>
-      <div class="panel stack">
-        <textarea id="grammar-check-text" rows="7" class="field" placeholder="Paste your essay or paragraph here..."></textarea>
-        <button class="btn btn-violet" id="ai-fix-btn" onclick="aiFixGrammar()">
-          <span class="ai-badge" style="background:rgba(255,255,255,.2);color:#fff;">AI</span>
-          Find &amp; fix mistakes
-        </button>
-        <button class="btn btn-ghost" onclick="auditContent()">Quick offline check (no fixes)</button>
-        <div class="audit-box is-hidden" id="audit-output"></div>
-        <div class="audit-box is-hidden" id="ai-fix-output"></div>
-        <p class="hint">"Find & fix" sends your text to Gemini AI to rewrite it. "Quick offline check" runs in your browser only — it lists issues but doesn't rewrite anything.</p>
-      </div>
-    </section>
-
-    <!-- 9. PowerPoint Generator -->
-    <section class="tool-page" id="ppt-builder-sec">
-      <div class="tool-header">
-        <div class="tool-icon" style="background:var(--signal-dim);color:var(--signal);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18v13H3V4zm0 13l6-5 4 3 4-4 4 3M9 21h6"/></svg></div>
-        <div>
-          <h1 class="tool-title">PowerPoint Generator</h1>
-          <p class="tool-desc">Type an outline, pick a theme, and download a ready-made .pptx — fully offline, no AI involved.</p>
-        </div>
-      </div>
-      <div class="panel stack">
-        <label class="field-label">Choose a theme</label>
-        <div class="tpl-grid" id="ppt-tpl-grid"></div>
-
-        <input type="text" id="ppt-title" placeholder="Presentation title" class="field" style="margin-top:6px;">
-        <input type="text" id="ppt-subtitle" placeholder="Subtitle (optional, e.g. your name or course)" class="field">
-        <textarea id="ppt-outline" rows="10" class="field" placeholder="Write your outline here. Each slide starts with a line ending in ':' or just any short line — that becomes the slide title. Lines under it become bullet points.
-
-Example:
-
-Introduction
-This is the first bullet
-This is the second bullet
-
-Key Findings
-Finding one
-Finding two"></textarea>
-        <p class="hint" id="ppt-slide-count">0 slides will be generated (plus a title slide).</p>
-        <button class="btn btn-signal" id="ppt-download-btn" onclick="downloadPpt()">Generate PowerPoint (.pptx)</button>
-        <p class="hint">Works fully offline — no AI, no upload. Each blank line in your outline starts a new slide; the first line of a block becomes the slide title.</p>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<script src="app.js"></script>
-</body>
-</html>
+        <div class="tool-icon" style="background:var(--signal-dim);color:var(--
