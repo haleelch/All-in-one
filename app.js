@@ -115,6 +115,9 @@ function clearBtnLoading(btn) {
 // ============================================================
 function updateLiveCounts() {
   const txt = document.getElementById('doc-text').value;
+  // Clear stale AI-formatted output when user edits the textarea manually,
+  // so PDF/DOCX downloads use the current textarea content, not old AI output.
+  if (window.tableFormattedOutput) window.tableFormattedOutput = null;
   document.getElementById('live-char-count').innerText = txt.length;
   const words = txt.trim().split(/\s+/).filter(w => w.length > 0);
   document.getElementById('live-word-count').innerText = txt.trim() ? words.length : 0;
@@ -477,12 +480,11 @@ async function downloadWord() {
   if (!text.trim() && !window.tableFormattedOutput) { alert("Type something first."); return; }
   if (!ensureDocxLib()) return;
 
-  const btn = document.querySelector('#doc-pdf-maker .btn-primary');
-  const originalLabel = btn ? btn.innerText : null;
-  if (btn) { btn.disabled = true; btn.innerText = 'Building .docx...'; }
+  const btn = document.getElementById('docx-download-btn');
+  setBtnLoading(btn, 'Building .docx...');
 
   try {
-    const sourceHtml = window.tableFormattedOutput || text.split('\n').map(line => `<p>${line}</p>`).join('');
+    const sourceHtml = window.tableFormattedOutput || text.split('\n').map(line => `<p>${escapeHtml(line)}</p>`).join('');
     const blocks = htmlToDocxBlocks(sourceHtml);
     const blob = await buildDocxBlob(blocks);
     downloadBlob(blob, 'Document.docx');
@@ -491,7 +493,7 @@ async function downloadWord() {
     console.error('docx build error:', err);
     showDocStatus("Couldn't build the Word document. Please try again, or use Download .pdf instead.");
   } finally {
-    if (btn) { btn.disabled = false; btn.innerText = originalLabel; }
+    clearBtnLoading(btn);
   }
 }
 
