@@ -1,31 +1,44 @@
 // ============================================================
-// NAVIGATION — hash-based URLs for SEO + direct linking
-// Each tool gets a URL like /#photo-compressor, /#resume-builder-sec
-// so users can bookmark, share, or arrive from Google search results.
+// NAVIGATION — clean path-based URLs for SEO + direct linking
+// Each tool gets a real URL like /resume-builder, /age-calculator
+// so each one can be indexed and found separately on Google.
+// Old #hash links still work and are auto-redirected to the clean URL.
 // ============================================================
 
 const TOOL_META = {
-  'photo-compressor':   { title: 'Photo Compressor', desc: 'Compress and resize photos online — passport size, stamp size, custom dimensions.' },
-  'doc-pdf-maker':      { title: 'Doc & PDF Maker', desc: 'Turn plain notes into a Word document or styled PDF with optional AI formatting.' },
-  'image-to-pdf-sec':   { title: 'Images to PDF', desc: 'Combine multiple images into a single PDF file instantly, free.' },
-  'age-calculator-sec': { title: 'Age Calculator', desc: 'Calculate your exact age in years, months, and days from your date of birth.' },
-  'resume-builder-sec': { title: 'Resume Builder', desc: 'Build a professional resume PDF in minutes — free, no sign-up needed.' },
-  'grammar-checker-sec':{ title: 'Grammar Checker', desc: 'Check and fix English grammar mistakes using AI — paste any text and get it corrected.' },
-  'ppt-builder-sec':    { title: 'PowerPoint Generator', desc: 'Generate a complete PowerPoint presentation with AI from just a topic name.' },
+  'photo-compressor':   { title: 'Photo Compressor', desc: 'Compress and resize photos online — passport size, stamp size, custom dimensions.', path: '/photo-compressor' },
+  'doc-pdf-maker':      { title: 'Doc & PDF Maker', desc: 'Turn plain notes into a Word document or styled PDF with optional AI formatting.', path: '/doc-pdf-maker' },
+  'image-to-pdf-sec':   { title: 'Images to PDF', desc: 'Combine multiple images into a single PDF file instantly, free.', path: '/images-to-pdf' },
+  'age-calculator-sec': { title: 'Age Calculator', desc: 'Calculate your exact age in years, months, and days from your date of birth.', path: '/age-calculator' },
+  'resume-builder-sec': { title: 'Resume Builder', desc: 'Build a professional resume PDF in minutes — free, no sign-up needed.', path: '/resume-builder' },
+  'grammar-checker-sec':{ title: 'Grammar Checker', desc: 'Check and fix English grammar mistakes using AI — paste any text and get it corrected.', path: '/grammar-checker' },
+  'ppt-builder-sec':    { title: 'PowerPoint Generator', desc: 'Generate a complete PowerPoint presentation with AI from just a topic name.', path: '/powerpoint-generator' },
 };
+
+// Reverse lookup: clean path -> section id (also used to read the current URL)
+const PATH_TO_SECTION = {};
+Object.keys(TOOL_META).forEach(id => { PATH_TO_SECTION[TOOL_META[id].path] = id; });
 
 const BASE_TITLE = 'Student Utility Hub — Free Online Tools for Students';
 const BASE_DESC  = 'Free student tools: Photo Compressor, PDF Maker, Resume Builder, Grammar Checker, PowerPoint Generator. Works with Malayalam and English.';
 
-function openSection(sectionId) {
+// pushUrl: false when we're just syncing the UI to a URL that's already correct
+// (e.g. on initial load, or from a popstate event) — true when the user
+// clicked something and we need to add a new browser-history entry.
+function openSection(sectionId, pushUrl) {
+  if (pushUrl === undefined) pushUrl = true;
   const meta = TOOL_META[sectionId];
   document.title = meta ? `${meta.title} | Student Utility Hub` : BASE_TITLE;
   const descTag = document.querySelector('meta[name="description"]');
   if (descTag) descTag.content = meta ? meta.desc : BASE_DESC;
 
-  location.hash = sectionId;
+  const path = meta ? meta.path : '/';
   const canonical = document.getElementById('canonical-link');
-  if (canonical) canonical.href = `${location.origin}/${location.pathname}#${sectionId}`;
+  if (canonical) canonical.href = `${location.origin}${path}`;
+  if (pushUrl && location.pathname !== path) {
+    history.pushState({ sectionId: sectionId }, '', path);
+  }
+
   document.getElementById('home-page').style.display = 'none';
   document.getElementById('pages').style.display = 'block';
   document.querySelectorAll('.tool-page').forEach(p => p.classList.remove('active'));
@@ -36,27 +49,60 @@ function openSection(sectionId) {
   if (sectionId === 'ppt-builder-sec') initPptBuilder();
 }
 
-function goHome() {
-  location.hash = '';
+function goHome(pushUrl) {
+  if (pushUrl === undefined) pushUrl = true;
   document.title = BASE_TITLE;
   const descTag = document.querySelector('meta[name="description"]');
   if (descTag) descTag.content = BASE_DESC;
+  const canonical = document.getElementById('canonical-link');
+  if (canonical) canonical.href = `${location.origin}/`;
+  if (pushUrl && location.pathname !== '/') {
+    history.pushState({ sectionId: null }, '', '/');
+  }
   document.getElementById('pages').style.display = 'none';
   document.getElementById('home-page').style.display = 'block';
   window.scrollTo(0, 0);
 }
 
-// On load and hash change — handle direct links and back/forward nav.
-function handleHash() {
-  const hash = location.hash.replace('#', '').trim();
-  if (hash && document.getElementById(hash)) {
-    openSection(hash);
+// Reads the current URL (real path first, then legacy #hash) and shows the
+// matching tool without adding a duplicate history entry.
+function routeFromLocation() {
+  const cleanPath = location.pathname.replace(/\/$/, '') || '/';
+  let sectionId = PATH_TO_SECTION[cleanPath];
+
+  if (!sectionId) {
+    // Legacy bookmarked/shared links like /#resume-builder-sec — honor them,
+    // then silently upgrade the address bar to the new clean URL.
+    const hash = location.hash.replace('#', '').trim();
+    if (hash && TOOL_META[hash]) {
+      sectionId = hash;
+      history.replaceState({ sectionId: sectionId }, '', TOOL_META[hash].path);
+    }
+  }
+
+  if (sectionId) {
+    openSection(sectionId, false);
   } else {
-    goHome();
+    goHome(false);
   }
 }
-window.addEventListener('hashchange', handleHash);
-window.addEventListener('load', handleHash);
+
+// Back/forward buttons
+window.addEventListener('popstate', routeFromLocation);
+window.addEventListener('load', routeFromLocation);
+
+// Used by real <a href="/tool-name"> links in the markup: normal clicks are
+// intercepted for instant in-page navigation, but Ctrl/Cmd/middle-click
+// still open a new tab like a regular link (and search engines still see
+// a real href to crawl).
+function spaNav(event, action) {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+    return true;
+  }
+  event.preventDefault();
+  action();
+  return false;
+}
 
 // ============================================================
 // DARK MODE
