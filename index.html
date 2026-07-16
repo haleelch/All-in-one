@@ -82,6 +82,7 @@
   .display{ font-family:'Space Grotesk',sans-serif; }
 
   a{ color:inherit; }
+  a.brand, a.tool-card, a.back-btn{ text-decoration:none; }
   button{ font-family:inherit; cursor:pointer; }
   button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
     outline:2px solid var(--signal);
@@ -325,11 +326,11 @@
 <div class="wrap">
 
   <header class="topbar">
-    <button class="brand" onclick="goHome()" aria-label="Go to home">
+    <a class="brand" href="/" onclick="return spaNav(event, () => goHome())" aria-label="Go to home">
       <span class="brand-glyph">S</span>
       <span class="brand-mark">Student Utility Hub</span>
       <span class="brand-tag">7 tools</span>
-    </button>
+    </a>
     <button class="theme-toggle" id="theme-btn" onclick="toggleDarkMode()">
       <span id="dark-icon">◐</span><span id="dark-text">Dark</span>
     </button>
@@ -339,47 +340,47 @@
   <main id="home-page">
     <p class="board-label">Select a tool</p>
     <div class="board" id="board">
-      <button class="tool-card" data-hue="orange" onclick="openSection('photo-compressor')" aria-label="Open Photo Compressor">
+      <a class="tool-card" data-hue="orange" href="/photo-compressor" onclick="return spaNav(event, () => openSection('photo-compressor'))" aria-label="Open Photo Compressor">
         <span class="tool-index mono">01</span>
         <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>
         <span class="tool-name">Photo Compressor</span>
-      </button>
-      <button class="tool-card" data-hue="violet" onclick="openSection('doc-pdf-maker')" aria-label="Open Doc & PDF Maker">
+      </a>
+      <a class="tool-card" data-hue="violet" href="/doc-pdf-maker" onclick="return spaNav(event, () => openSection('doc-pdf-maker'))" aria-label="Open Doc & PDF Maker">
         <span class="tool-index mono">02</span>
         <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></span>
         <span class="tool-name">Doc & PDF Maker</span>
-      </button>
-      <button class="tool-card" data-hue="orange" onclick="openSection('image-to-pdf-sec')" aria-label="Open Images to PDF">
+      </a>
+      <a class="tool-card" data-hue="orange" href="/images-to-pdf" onclick="return spaNav(event, () => openSection('image-to-pdf-sec'))" aria-label="Open Images to PDF">
         <span class="tool-index mono">03</span>
         <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg></span>
         <span class="tool-name">Images to PDF</span>
-      </button>
-      <button class="tool-card" data-hue="violet" onclick="openSection('age-calculator-sec')" aria-label="Open Age Calculator">
+      </a>
+      <a class="tool-card" data-hue="violet" href="/age-calculator" onclick="return spaNav(event, () => openSection('age-calculator-sec'))" aria-label="Open Age Calculator">
         <span class="tool-index mono">04</span>
         <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>
         <span class="tool-name">Age Calculator</span>
-      </button>
-      <button class="tool-card" data-hue="orange" onclick="openSection('resume-builder-sec')" aria-label="Open Resume Builder">
+      </a>
+      <a class="tool-card" data-hue="orange" href="/resume-builder" onclick="return spaNav(event, () => openSection('resume-builder-sec'))" aria-label="Open Resume Builder">
         <span class="tool-index mono">05</span>
         <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
         <span class="tool-name">Resume Builder</span>
-      </button>
-      <button class="tool-card" data-hue="violet" onclick="openSection('grammar-checker-sec')" aria-label="Open Grammar Checker">
+      </a>
+      <a class="tool-card" data-hue="violet" href="/grammar-checker" onclick="return spaNav(event, () => openSection('grammar-checker-sec'))" aria-label="Open Grammar Checker">
         <span class="tool-index mono">06</span>
         <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
         <span class="tool-name">Grammar Checker</span>
-      </button>
-      <button class="tool-card" data-hue="orange" onclick="openSection('ppt-builder-sec')" aria-label="Open PowerPoint Generator">
+      </a>
+      <a class="tool-card" data-hue="orange" href="/powerpoint-generator" onclick="return spaNav(event, () => openSection('ppt-builder-sec'))" aria-label="Open PowerPoint Generator">
         <span class="tool-index mono">07</span>
         <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18v13H3V4zm0 13l6-5 4 3 4-4 4 3M9 21h6"/></svg></span>
         <span class="tool-name">PowerPoint Generator</span>
-      </button>
+      </a>
     </div>
   </main>
 
   <!-- ============ TOOL PAGES ============ -->
   <main id="pages" style="display:none;">
-    <button class="back-btn" onclick="goHome()">&larr; Back to all tools</button>
+    <a class="back-btn" href="/" onclick="return spaNav(event, () => goHome())">&larr; Back to all tools</a>
 
     <!-- 1. Photo Compressor -->
     <section class="tool-page" id="photo-compressor">
